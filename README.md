@@ -57,7 +57,7 @@ started with Machine Learning Operations (MLOps).
 ## Goal
 
 This is the project description for group 8 in the 02476 Machine Learning Operations course on DTU. 
-The overall goal of the project is to design a model which could classify whether the input is  food or vegetables, and what specific type is.
+The overall goal of the project is to design a model which could classify whether the input is  fruit or vegetables, and what specific type is.
 
 ## Framework
 
