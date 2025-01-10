@@ -57,7 +57,7 @@ started with Machine Learning Operations (MLOps).
 ## Goal
 
 This is the project description for group 8 in the 02476 Machine Learning Operations course on DTU. 
-The overall goal of the project is to design a model which could classify whether the input is  food or vegetables, and what specific type is.
+The overall goal of the project is to design a model which could classify whether the input is  fruit or vegetables, and what specific type is.
 
 ## Framework
 
@@ -72,4 +72,4 @@ Vegetables: Cucumber, Carrot, Capsicum, Onion, Potato, Lemon, Tomato, Radish, Be
 
 ## Model
 
-We intend to perform an image classification task on the food data using some type of CNN. We expect to be try different models such as ResNet and VGG
+We intend to perform an image classification task on the food data using some type of CNN. We expect to be try different models such as ResNet and VGG, and use the best one.
