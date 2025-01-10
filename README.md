@@ -72,4 +72,4 @@ Vegetables: Cucumber, Carrot, Capsicum, Onion, Potato, Lemon, Tomato, Radish, Be
 
 ## Model
 
-We intend to perform an image classification task on the food data using some type of CNN. We expect to be try different models such as ResNet and VGG
+We intend to perform an image classification task on the food data using some type of CNN. We expect to be try different models such as ResNet and VGG, and use the best one.
