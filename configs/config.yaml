@@ -1,0 +1,7 @@
+# config.yaml
+defaults:
+  - dataset: mnist
+  - experiment: exp1
+  - model: awesome_model
+  - optimizer: adam
+  - loss: cross_entropy
