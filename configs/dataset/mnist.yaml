@@ -1,0 +1,12 @@
+# mnist data configuration to specify the data path and other parameters
+name: mnist
+preprocess_class: MNISTDataset
+train_class: MNISTTrainDataset
+test_class: MNISTTestDataset
+data_dir: data/raw/mnist
+processed_files:
+  output_folder: data/processed/mnist
+  train_images_file: train_images.pt
+  train_target_file: train_target.pt
+  test_images_file: test_images.pt
+  test_target_file: test_target.pt

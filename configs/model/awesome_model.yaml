@@ -1,0 +1,11 @@
+
+# awesome_model.yaml
+_target_: model.MyAwesomeModel
+input_channels: 1                     # Number of input channels (e.g., 3 for RGB, 1 for grayscale)
+conv_layers:                          # List of convolutional layers
+  - [32, 3, 1]                        # [output_channels, kernel_size, stride]
+  - [64, 3, 1]
+  - [128, 3, 1]
+fc_layers: [128, 64, 10]              # Fully connected layers (last value = number of output classes)
+activation: "ReLU"                    # Activation function: ReLU, LeakyReLU, Tanh, Sigmoid
+dropout_p: 0.3                        # Dropout probability
