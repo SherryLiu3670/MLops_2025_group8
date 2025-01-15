@@ -14,6 +14,9 @@ def train(cfg) -> None:
     epochs=cfg.experiment.epochs
     
     device = cfg.experiment.device
+    # check if the device in configuration is supported otherwise fallback to cpu
+    if device != "cpu" and not torch.cuda.is_available():
+        device = "cpu"
     
     #lr: float = 1e-3, batch_size: int = 32, epochs: int = 10
     print("Training day and night")
