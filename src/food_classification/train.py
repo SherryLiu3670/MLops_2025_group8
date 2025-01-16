@@ -3,7 +3,8 @@ import matplotlib.pyplot as plt
 import torch
 import typer
 import data
-import model as models
+# from . import data
+# from . import model as models
 
 @hydra.main(config_path="../../configs", config_name="config")
 def train(cfg) -> None:
@@ -23,6 +24,7 @@ def train(cfg) -> None:
     print(f"{lr=}, {batch_size=}, {epochs=}")
 
     # instead of fixating the model, we can use the config file to define the model
+    print(cfg.model)
     model = hydra.utils.instantiate(cfg.model).to(device)
 
     # preparing training dataset   
