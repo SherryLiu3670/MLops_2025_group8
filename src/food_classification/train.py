@@ -3,9 +3,8 @@ import matplotlib.pyplot as plt
 import torch
 import typer
 import data
-# from . import data
-# from . import model as models
 
+import torchvision.transforms as transforms
 
 @hydra.main(config_path="../../configs", config_name="config")
 def train(cfg) -> None:
@@ -30,13 +29,37 @@ def train(cfg) -> None:
     # preparing training dataset   
     train_dataset_class = getattr(data, cfg.dataset.train_class)
     train_set = train_dataset_class(**cfg.dataset.processed_files)
-    train_dataloader = torch.utils.data.DataLoader(train_set, batch_size=batch_size)
+    #################Only for test with MNIST#################################
+    transform = transforms.Compose([
+    transforms.Resize((224, 224)),  # Resize to 224x224
+    transforms.Normalize(mean=[0.5], std=[0.5])  # Normalize grayscale images
+])
+    class TransformedDataset(torch.utils.data.Dataset):
+        def __init__(self, dataset, transform):
+            self.dataset = dataset
+            self.transform = transform
 
+        def __len__(self):
+            return len(self.dataset)
+
+        def __getitem__(self, idx):
+            image, target = self.dataset[idx]
+            # Add a channel dimension for grayscale and apply the transform
+            #image = image.unsqueeze(0)  # Add channel dimension
+            image = self.transform(image)
+            return image, target
+    
+    transformed_train_set = TransformedDataset(train_set, transform)
+    train_dataloader = torch.utils.data.DataLoader(transformed_train_set, batch_size=batch_size, shuffle=True)
+    #################Only for test with MNIST#################################
+    #train_dataloader = torch.utils.data.DataLoader(train_set, batch_size=batch_size)
+    #################################################
+	
     validate_dataset_class = getattr(data, cfg.dataset.test_class)
     validate_set = validate_dataset_class(**cfg.dataset.processed_files)
     validate_dataloader = torch.utils.data.DataLoader(validate_set, batch_size=batch_size)
 
-    loss_fn = hydra.utils.instantiate(cfg.loss)
+	loss_fn = hydra.utils.instantiate(cfg.loss)
     optimizer = hydra.utils.instantiate(cfg.optimizer, model.parameters())
 
     best_validation_loss = float('inf')

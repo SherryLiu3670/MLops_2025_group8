@@ -1,0 +1,4 @@
+_target_: model.ResNetModel
+model_type: "resnet18"  # Options: "resnet18", "resnet34", "resnet50"
+num_classes: 10          
+pretrained: true         

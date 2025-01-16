@@ -2,6 +2,6 @@
 defaults:
   - dataset: mnist
   - experiment: exp1
-  - model: awesome_model
+  - model: mobilenet_model.yaml
   - optimizer: adam
   - loss: cross_entropy
