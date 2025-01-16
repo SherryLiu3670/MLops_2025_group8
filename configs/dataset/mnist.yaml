@@ -8,5 +8,7 @@ processed_files:
   output_folder: data/processed/mnist
   train_images_file: train_images.pt
   train_target_file: train_target.pt
+  val_images_file: val_images.pt
+  val_target_file: val_target.pt
   test_images_file: test_images.pt
   test_target_file: test_target.pt

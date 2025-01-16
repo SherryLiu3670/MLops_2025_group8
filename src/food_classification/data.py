@@ -51,7 +51,7 @@ class MNISTTestDataset(Dataset):
         test_images_path = f"../../../{output_folder}/{test_images_file}"
         test_target_path = f"../../../{output_folder}/{test_target_file}"
 
-        pdb.set_trace()
+        # pdb.set_trace()
             
         if not os.path.exists(test_images_path) or not os.path.exists(test_target_path):
             raise FileNotFoundError("Preprocessing step should be executed first")
