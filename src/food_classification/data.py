@@ -42,7 +42,7 @@ class MNISTTrainDataset(Dataset):
 class MNISTTestDataset(Dataset):
     """Custom dataset for testing."""
 
-    def __init__(self, **preprocessed_dict) -> None:
+    def __init__(self, **preprocessed_dict) -> None: #222
 
         output_folder = preprocessed_dict["output_folder"]
         test_images_file = preprocessed_dict["train_images_file"]
