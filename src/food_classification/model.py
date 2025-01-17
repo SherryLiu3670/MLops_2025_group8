@@ -59,7 +59,7 @@ class MyAwesomeModel(nn.Module):
         return x
 
 class ResNetModel(nn.Module):
-    def __init__(self, model_type="resnet18", num_classes=36, pretrained=True):
+    def __init__(self, in_channels=1, model_type="resnet18", num_classes=36, pretrained=True):
         
         super(ResNetModel, self).__init__()
 
@@ -72,7 +72,7 @@ class ResNetModel(nn.Module):
         else:
             raise ValueError(f"Invalid model_type: {model_type}. Choose from 'resnet18', 'resnet34', 'resnet50'.")
         #################Only for test with MNIST#################################
-        #self.resnet.conv1 = nn.Conv2d(1, 64, kernel_size=7, stride=2, padding=3, bias=False)
+        self.resnet.conv1 = nn.Conv2d(in_channels, 64, kernel_size=7, stride=2, padding=3, bias=False)
         self.resnet.fc = nn.Linear(self.resnet.fc.in_features, num_classes)
 
     def forward(self, x):
@@ -80,7 +80,7 @@ class ResNetModel(nn.Module):
     
 
 class MobileNetModel(nn.Module):
-    def __init__(self, model_type="mobilenetV2", num_classes=36, pretrained=True):
+    def __init__(self, in_channels=1, model_type="mobilenetV2", num_classes=36, pretrained=True):
         
         super(MobileNetModel, self).__init__()
 
@@ -102,7 +102,7 @@ class MobileNetModel(nn.Module):
 
         # Replace the Conv2d layer for single-channel input (grayscale)
         new_conv = nn.Conv2d(
-            in_channels=1,  # Change to single-channel input
+            in_channels=in_channels,  # Change to single-channel input or 3 channels
             out_channels=conv_layer.out_channels,
             kernel_size=conv_layer.kernel_size,
             stride=conv_layer.stride,
