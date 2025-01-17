@@ -1,0 +1,15 @@
+# mnist data configuration to specify the data path and other parameters
+name: Fruit
+preprocess_class: FruitDataset
+train_class: FruitTrainDataset
+test_class: FruitTestDataset
+val_class: FruitValDataset
+data_dir: data/raw
+processed_files:
+  output_folder: data/processed
+  train_images_file: train_images.pt
+  train_target_file: train_target.pt
+  test_images_file: test_images.pt
+  test_target_file: test_target.pt
+  val_images_file: "val_images.pt"
+  val_target_file: "val_targets.pt"
