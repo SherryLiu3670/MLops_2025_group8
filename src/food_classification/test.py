@@ -5,7 +5,6 @@ from torch.utils.data import DataLoader
 from hydra.utils import get_original_cwd
 import hydra
 import data
-import pdb
 
 @hydra.main(config_path="../../configs", config_name="config")
 def test(cfg) -> None:

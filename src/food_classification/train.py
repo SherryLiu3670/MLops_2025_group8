@@ -6,7 +6,6 @@ import data
 # from . import data
 # from . import model as models
 
-import pdb
 
 @hydra.main(config_path="../../configs", config_name="config")
 def train(cfg) -> None:
