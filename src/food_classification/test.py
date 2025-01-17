@@ -2,8 +2,10 @@ import os
 from pathlib import Path
 import torch
 from torch.utils.data import DataLoader
+from hydra.utils import get_original_cwd
 import hydra
 import data
+import pdb
 
 @hydra.main(config_path="../../configs", config_name="config")
 def test(cfg) -> None:
@@ -12,8 +14,8 @@ def test(cfg) -> None:
     batch_size = cfg.experiment.batch_size
 
     print("Testing the model")
-    current_working_directory = os.getcwd()
-    model_checkpoint = Path(current_working_directory + "/../14-52-09/best_model.pth")
+    original_working_directory = get_original_cwd()
+    model_checkpoint = os.path.join(original_working_directory, cfg.experiment.modelpath)
     model = hydra.utils.instantiate(cfg.model).to(device)
     model.load_state_dict(torch.load(model_checkpoint, map_location=device))
     model.eval()

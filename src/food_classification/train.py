@@ -6,6 +6,8 @@ import data
 # from . import data
 # from . import model as models
 
+import pdb
+
 @hydra.main(config_path="../../configs", config_name="config")
 def train(cfg) -> None:
     """Train a model on MNIST."""
@@ -24,7 +26,6 @@ def train(cfg) -> None:
     print(f"{lr=}, {batch_size=}, {epochs=}")
 
     # instead of fixating the model, we can use the config file to define the model
-    print(cfg.model)
     model = hydra.utils.instantiate(cfg.model).to(device)
 
     # preparing training dataset   
@@ -89,6 +90,8 @@ def train(cfg) -> None:
             torch.save(model.state_dict(), "best_model.pth")
             print(f"New best model saved with validation loss: {best_validation_loss:.4f}")
     
+    torch.save(model.state_dict(), "last_model.pth")
+
     print("Training complete")
     # torch.save(model.state_dict(), "../../../models/model.pth")
     fig, axs = plt.subplots(2, 2, figsize=(15, 5))
