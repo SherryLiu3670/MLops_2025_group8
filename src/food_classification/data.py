@@ -3,7 +3,7 @@ from pathlib import Path
 
 import torch
 from torch.utils.data import Dataset
-
+from hydra.utils import get_original_cwd
 import hydra
 
 def normalize(images: torch.Tensor) -> torch.Tensor:
@@ -18,9 +18,12 @@ class MNISTTrainDataset(Dataset):
         output_folder = preprocessed_dict["output_folder"]
         train_images_file = preprocessed_dict["train_images_file"]
         train_target_file = preprocessed_dict["train_target_file"]
-
-        train_images_path = f"../../../{output_folder}/{train_images_file}"
-        train_target_path = f"../../../{output_folder}/{train_target_file}"
+        project_root = get_original_cwd()
+        output_path = os.path.join(project_root, output_folder)
+        train_images_path = os.path.abspath(os.path.join(output_path, train_images_file))
+        train_target_path = os.path.abspath(os.path.join(output_path, train_target_file))
+        # train_images_path = f"../../../{output_folder}/{train_images_file}"
+        # train_target_path = f"../../../{output_folder}/{train_target_file}"
 
         if not os.path.exists(train_images_path) or not os.path.exists(train_target_path):
             raise FileNotFoundError("Preprocessing step should be executed first")
@@ -45,13 +48,17 @@ class MNISTTestDataset(Dataset):
     def __init__(self, **preprocessed_dict) -> None:
 
         output_folder = preprocessed_dict["output_folder"]
-        test_images_file = preprocessed_dict["train_images_file"]
-        test_target_file = preprocessed_dict["train_target_file"]
-        
-        test_images_path = f"../../../{output_folder}/{test_images_file}"
-        test_target_path = f"../../../{output_folder}/{test_target_file}"
+        test_images_file = preprocessed_dict["test_images_file"]
+        test_target_file = preprocessed_dict["test_target_file"]
+        project_root = get_original_cwd()
+        output_path = os.path.join(project_root, output_folder)
+        test_images_path = os.path.abspath(os.path.join(output_path, test_images_file))
+        test_target_path = os.path.abspath(os.path.join(output_path, test_target_file))
 
-        pdb.set_trace()
+        
+        # test_images_path = f"../../../{output_folder}/{test_images_file}"
+        # test_target_path = f"../../../{output_folder}/{test_target_file}"
+
             
         if not os.path.exists(test_images_path) or not os.path.exists(test_target_path):
             raise FileNotFoundError("Preprocessing step should be executed first")
