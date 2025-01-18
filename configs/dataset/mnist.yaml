@@ -4,6 +4,8 @@ preprocess_class: MNISTDataset
 train_class: MNISTTrainDataset
 test_class: MNISTTestDataset
 data_dir: data/raw/mnist
+input_resolution: [28, 28]
+input_channels: 1
 processed_files:
   output_folder: data/processed/mnist
   train_images_file: train_images.pt

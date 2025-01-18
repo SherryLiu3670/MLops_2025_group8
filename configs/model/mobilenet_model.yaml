@@ -1,5 +1,6 @@
-_target_: model.MobileNetModel
-model_type: "mobilenetV2"  # Options: 'mobilenetV2', 'mobilenetV3L', 'mobilenetV3S'
-in_channels: 1
-num_classes: 10          
-pretrained: true         
+model_config:
+  _target_: model.MobileNetModel
+  model_type: "mobilenetV2"  # Options: 'mobilenetV2', 'mobilenetV3L', 'mobilenetV3S'
+  input_channels: 1
+  num_classes: 10          
+  pretrained: true         
