@@ -45,7 +45,7 @@ def train(cfg) -> None:
     validate_set = validate_dataset_class(**cfg.dataset.processed_files)
     validate_dataloader = torch.utils.data.DataLoader(validate_set, batch_size=batch_size)
 
-	loss_fn = hydra.utils.instantiate(cfg.loss)
+    loss_fn = hydra.utils.instantiate(cfg.loss)
     optimizer = hydra.utils.instantiate(cfg.optimizer, model.parameters())
 
     best_validation_loss = float('inf')
