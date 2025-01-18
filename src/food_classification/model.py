@@ -72,17 +72,8 @@ class ResNetModel(nn.Module):
         else:
             raise ValueError(f"Invalid model_type: {model_type}. Choose from 'resnet18', 'resnet34', 'resnet50'.")
         
-        for param in self.resnet.parameters():
-            param.requires_grad = False
-        
         self.resnet.conv1 = nn.Conv2d(input_channels, 64, kernel_size=7, stride=2, padding=3, bias=False)
         self.resnet.fc = nn.Linear(self.resnet.fc.in_features, num_classes)
-
-        # unfreeze the parameters of self.resnet.conv1 and self.resnet.fc
-        for param in self.resnet.conv1.parameters():
-            param.requires_grad = True
-        for param in self.resnet.fc.parameters():
-            param.requires_grad = True
 
     def forward(self, x):
         return self.resnet(x)
