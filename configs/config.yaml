@@ -2,6 +2,6 @@
 defaults:
   - dataset: mnist
   - experiment: exp1
-  - model: resnet_model.yaml
+  - model: resnet_model
   - optimizer: adam
   - loss: cross_entropy
