@@ -2,8 +2,8 @@ import hydra
 import matplotlib.pyplot as plt
 import torch
 import typer
-import data
-import model as models
+import food_classification.data as data
+import food_classification.model as models
 
 @hydra.main(config_path="../../configs", config_name="config")
 def train(cfg) -> None:
