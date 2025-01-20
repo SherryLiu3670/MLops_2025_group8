@@ -1,25 +1,25 @@
 import hydra
 import matplotlib.pyplot as plt
 import torch
-import typer
 import data
 
 import torchvision.transforms as transforms
+
 
 @hydra.main(config_path="../../configs", config_name="config")
 def train(cfg) -> None:
     """Train a model on MNIST."""
 
-    lr=cfg.experiment.lr
-    batch_size=cfg.experiment.batch_size
-    epochs=cfg.experiment.epochs
-    
+    lr = cfg.experiment.lr
+    batch_size = cfg.experiment.batch_size
+    epochs = cfg.experiment.epochs
+
     device = cfg.experiment.device
     # check if the device in configuration is supported otherwise fallback to cpu
     if device != "cpu" and not torch.cuda.is_available():
         device = "cpu"
-    
-    #lr: float = 1e-3, batch_size: int = 32, epochs: int = 10
+
+    # lr: float = 1e-3, batch_size: int = 32, epochs: int = 10
     print("Training day and night")
     print(f"{lr=}, {batch_size=}, {epochs=}")
 
@@ -28,19 +28,21 @@ def train(cfg) -> None:
     cfg.model.model_config.input_channels = cfg.dataset.input_channels
     model = hydra.utils.instantiate(cfg.model.model_config).to(device)
 
-    # preparing training dataset   
+    # preparing training dataset
     if "desired_input_resolution" in cfg.model:
-        transform = transforms.Compose([
-            transforms.Resize((cfg.model.desired_input_resolution)),  # Resize to datasets' native resolution
-        ])
+        transform = transforms.Compose(
+            [
+                transforms.Resize((cfg.model.desired_input_resolution)),  # Resize to datasets' native resolution
+            ]
+        )
     else:
         transform = None
 
     train_dataset_class = getattr(data, cfg.dataset.train_class)
     train_set = train_dataset_class(**cfg.dataset.process_config, transform=transform)
-    
-    train_dataloader = torch.utils.data.DataLoader(train_set, batch_size=batch_size, shuffle=True) 
-    
+
+    train_dataloader = torch.utils.data.DataLoader(train_set, batch_size=batch_size, shuffle=True)
+
     validate_dataset_class = getattr(data, cfg.dataset.test_class)
     validate_set = validate_dataset_class(**cfg.dataset.process_config)
     validate_dataloader = torch.utils.data.DataLoader(validate_set, batch_size=batch_size)
@@ -48,7 +50,7 @@ def train(cfg) -> None:
     loss_fn = hydra.utils.instantiate(cfg.loss)
     optimizer = hydra.utils.instantiate(cfg.optimizer, model.parameters())
 
-    best_validation_loss = float('inf')
+    best_validation_loss = float("inf")
     statistics = {"train_loss": [], "train_accuracy": [], "validation_loss": [], "validation_accuracy": []}
     for epoch in range(epochs):
         # training step
@@ -67,7 +69,7 @@ def train(cfg) -> None:
 
             if i % 100 == 0:
                 print(f"Epoch {epoch}, iter {i}, loss: {loss.item()}")
-        
+
         # Validation step (every epoch)
         model.eval()
         epoch_validation_loss = 0.0
@@ -90,14 +92,16 @@ def train(cfg) -> None:
         statistics["validation_loss"].append(epoch_validation_loss)
         statistics["validation_accuracy"].append(epoch_validation_accuracy)
 
-        print(f"Epoch {epoch} - Validation Loss: {epoch_validation_loss:.4f}, Validation Accuracy: {epoch_validation_accuracy:.4f}")
+        print(
+            f"Epoch {epoch} - Validation Loss: {epoch_validation_loss:.4f}, Validation Accuracy: {epoch_validation_accuracy:.4f}"
+        )
 
         # Save the best model
         if epoch_validation_loss < best_validation_loss:
             best_validation_loss = epoch_validation_loss
             torch.save(model.state_dict(), "best_model.pth")
             print(f"New best model saved with validation loss: {best_validation_loss:.4f}")
-    
+
     torch.save(model.state_dict(), "last_model.pth")
 
     print("Training complete")

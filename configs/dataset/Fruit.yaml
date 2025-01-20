@@ -1,10 +1,10 @@
 data_dir: data/raw/Fruit
+input_channels: 3
 labels:
 - apple
 - banana
 name: Fruit
 preprocess_class: FruitDataset
-input_channels: 3
 process_config:
   output_folder: data/processed/Fruit
   partial: true
