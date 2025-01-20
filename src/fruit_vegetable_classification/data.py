@@ -3,6 +3,7 @@
 import os
 import shutil
 from pathlib import Path
+from typing import List
 
 import hydra
 import kagglehub
@@ -97,20 +98,24 @@ class MNISTDataset:
 
     def preprocess(
         self,
-        output_folder: Path,
-        train_images_file: Path,
-        train_target_file: Path,
-        test_images_file: Path,
-        test_target_file: Path,
+        **prep_config,
     ) -> None:
         """Preprocess the raw data and save it to the output folder."""
+        train_images_file = prep_config["train_images_file"]
+        train_target_file = prep_config["train_target_file"]
+        test_images_file = prep_config["test_images_file"]
+        test_target_file = prep_config["test_target_file"]
+        output_folder = prep_config["output_folder"]
+
         # Read all the pt files in the raw data folder
-        train_images, train_target = [], []
+        train_images_list: List[torch.Tensor] = []
+        train_target_list: List[torch.Tensor] = []
+
         for i in range(6):
-            train_images.append(torch.load(f"{self.data_path}/train_images_{i}.pt"))
-            train_target.append(torch.load(f"{self.data_path}/train_target_{i}.pt"))
-        train_images = torch.cat(train_images)
-        train_target = torch.cat(train_target)
+            train_images_list.append(torch.load(f"{self.data_path}/train_images_{i}.pt"))
+            train_target_list.append(torch.load(f"{self.data_path}/train_target_{i}.pt"))
+        train_images: torch.Tensor = torch.cat(train_images_list)
+        train_target: torch.Tensor = torch.cat(train_target_list)
 
         test_images = torch.load(f"{self.data_path}/test_images.pt")
         test_target = torch.load(f"{self.data_path}/test_target.pt")
@@ -232,7 +237,7 @@ class FruitVegetableDataset:
         self.test_set = None
         self.validation_set = None
         self.kaggle_dataset_identifier = "kritikseth/fruit-and-vegetable-image-recognition/versions/8"
-        self.class_names = None
+        self.class_names: List[str] = []
 
     def download_data(self, output_folder: Path) -> None:
         """Download the dataset from Kaggle and save it to the output folder."""
@@ -248,7 +253,8 @@ class FruitVegetableDataset:
             print(f"Error downloading data: {e}")
 
     # fetch labels from the folder names
-    def fetch_labels(self, directory_path: Path, partial: bool = False) -> list[str]:
+    @staticmethod
+    def fetch_labels(directory_path: str, partial: bool = False) -> List[str]:
         """Fetch the labels from the folder names and update the YAML file."""
         folder_names = [
             folder for folder in os.listdir(directory_path) if os.path.isdir(os.path.join(directory_path, folder))
@@ -312,16 +318,18 @@ class FruitVegetableDataset:
 
     def preprocess(
         self,
-        output_folder: str,
-        train_images_file: str,
-        train_target_file: str,
-        val_images_file: str,
-        val_target_file: str,
-        test_images_file: str,
-        test_target_file: str,
-        partial: bool,
+        **prep_config,
     ) -> None:
         """Preprocess the raw data and save it to the output folder."""
+        train_images_file = prep_config["train_images_file"]
+        train_target_file = prep_config["train_target_file"]
+        val_images_file = prep_config["val_images_file"]
+        val_target_file = prep_config["val_target_file"]
+        test_images_file = prep_config["test_images_file"]
+        test_target_file = prep_config["test_target_file"]
+        output_folder = prep_config["output_folder"]
+        partial = prep_config["partial"]
+
         if not os.path.exists(self.data_path):
             self.download_data(self.data_path)
         else:

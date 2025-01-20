@@ -1,4 +1,5 @@
 """Train a model for classification task."""
+from typing import Dict, List
 import hydra
 import matplotlib.pyplot as plt
 import torch
@@ -43,7 +44,7 @@ def train(cfg) -> None:
 
     train_dataloader = torch.utils.data.DataLoader(train_set, batch_size=batch_size, shuffle=True)
 
-    validate_dataset_class = getattr(data, cfg.dataset.test_class)
+    validate_dataset_class = getattr(data, cfg.dataset.val_class)
     validate_set = validate_dataset_class(**cfg.dataset.process_config)
     validate_dataloader = torch.utils.data.DataLoader(validate_set, batch_size=batch_size)
 
@@ -51,7 +52,15 @@ def train(cfg) -> None:
     optimizer = hydra.utils.instantiate(cfg.optimizer, model.parameters())
 
     best_validation_loss = float("inf")
-    statistics = {"train_loss": [], "train_accuracy": [], "validation_loss": [], "validation_accuracy": []}
+    # initialize train, val, and test loss statistics with type annotations
+
+    statistics: Dict[str, List[float]] = {
+        "train_loss": [],
+        "train_accuracy": [],
+        "validation_loss": [],
+        "validation_accuracy": [],
+    }
+
     for epoch in range(epochs):
         # training step
         model.train()
