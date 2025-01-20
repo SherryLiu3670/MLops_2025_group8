@@ -117,36 +117,21 @@ class MNISTDataset:
         torch.save(test_images, f"{output_folder}/{test_images_file}")
         torch.save(test_target, f"{output_folder}/{test_target_file}")
 
-
-class FruitTrainDataset(Dataset):
-    """Custom dataset for training ."""
-    def __init__(self, output_folder, train_images_file, train_target_file):
-        train_images_path = os.path.join(output_folder, train_images_file)
-        train_target_path = os.path.join(output_folder, train_target_file)
-
-        if not os.path.exists(train_images_path) or not os.path.exists(train_target_path):
-            raise FileNotFoundError("Preprocessing step should be executed first.")
-        
-        train_images = torch.load(train_images_path)
-        train_target = torch.load(train_target_path)
-
-        self.train_images = train_images
-        self.train_target = train_target
-
-    def __len__(self) -> int:
-        return len(self.train_images)
-
-    def __getitem__(self, index: int):
-        return self.train_images[index], self.train_target[index]
-
 class FruitTestDataset(Dataset):
-    """Custom dataset for testing ."""
-    def __init__(self, output_folder, test_images_file, test_target_file):
-        test_images_path = os.path.join(output_folder, test_images_file)
-        test_target_path = os.path.join(output_folder, test_target_file)
+    """Custom dataset for testing."""
 
+    def __init__(self, **preprocessed_dict) -> None:
+        output_folder = preprocessed_dict["output_folder"]
+        test_images_file = preprocessed_dict["test_images_file"]
+        test_target_file = preprocessed_dict["test_target_file"]
+        
+        test_images_path = f"../../../{output_folder}/{test_images_file}"
+        test_target_path = f"../../../{output_folder}/{test_target_file}"
+
+        #pdb.set_trace()
+            
         if not os.path.exists(test_images_path) or not os.path.exists(test_target_path):
-            raise FileNotFoundError("Preprocessing step should be executed first.")
+            raise FileNotFoundError("Preprocessing step should be executed first")
         
         test_images = torch.load(test_images_path)
         test_target = torch.load(test_target_path)
@@ -155,18 +140,82 @@ class FruitTestDataset(Dataset):
         self.test_target = test_target
 
     def __len__(self) -> int:
+        """Return the length of the testing dataset."""
         return len(self.test_images)
 
     def __getitem__(self, index: int):
+        """Return a given sample from the testing dataset."""
         return self.test_images[index], self.test_target[index]
 
+class FruitValDataset(Dataset):
+    """Custom dataset for validation."""
+
+    def __init__(self, **preprocessed_dict) -> None:
+        output_folder = preprocessed_dict["output_folder"]
+        val_images_file = preprocessed_dict["val_images_file"]
+        val_target_file = preprocessed_dict["val_target_file"]
+
+        
+        val_images_path = f"../../../{output_folder}/{val_images_file}"
+        val_target_path = f"../../../{output_folder}/{val_target_file}"
+
+        
+        if not os.path.exists(val_images_path) or not os.path.exists(val_target_path):
+            raise FileNotFoundError("Preprocessing step should be executed first")
+
+       
+        val_images = torch.load(val_images_path)
+        val_targets = torch.load(val_target_path)
+
+        
+        self.val_images = val_images
+        self.val_targets = val_targets
+
+    def __len__(self) -> int:
+        
+        return len(self.val_images)
+
+    def __getitem__(self, index: int):
+        
+        return self.val_images[index], self.val_targets[index]
+
+class FruitTrainDataset(Dataset):
+    """Custom dataset for training."""
+
+    def __init__(self, **preprocessed_dict) -> None:
+        output_folder = preprocessed_dict["output_folder"]
+        train_images_file = preprocessed_dict["train_images_file"]
+        train_target_file = preprocessed_dict["train_target_file"]
+
+        train_images_path = f"../../../{output_folder}/{train_images_file}"
+        train_target_path = f"../../../{output_folder}/{train_target_file}"
+
+        if not os.path.exists(train_images_path) or not os.path.exists(train_target_path):
+            raise FileNotFoundError("Preprocessing step should be executed first")
+        
+        train_images = torch.load(train_images_path)
+        train_target = torch.load(train_target_path)
+
+        self.train_images = train_images
+        self.train_target = train_target
+
+    def __len__(self) -> int:
+        """Return the length of the training dataset."""
+        return len(self.train_images)
+
+    def __getitem__(self, index: int):
+        """Return a given sample from the training dataset."""
+        return self.train_images[index], self.train_target[index]
+
+
 class FruitDataset:
-    """
-    Class to preprocess raw images from train/validation/test folders,
-    convert them to .pt files, then we can load them with FruitTrainDataset, etc.
-    """
+    """Class to preprocess and hold train and test datasets."""
+
     def __init__(self, raw_data_path: Path) -> None:
-        self.data_path = raw_data_path  # define train/, validation/, test/
+        self.data_path = Path(raw_data_path)
+        self.train_set = None
+        self.test_set = None
+        self.validation_set = None
 
     def _read_images_from_folder(self, folder: Path):
     
@@ -236,25 +285,14 @@ class FruitDataset:
         torch.save(test_images,   os.path.join(output_folder, test_images_file))
         torch.save(test_targets,  os.path.join(output_folder, test_target_file))
 
-def preprocess():
 
-    raw_data_path = Path("/kaggle/input/fruit-and-vegetable-image-recognition")
-    output_folder = "/kaggle/working"
-   
-    train_images_file = "train_images.pt"
-    train_target_file = "train_target.pt"
-    val_images_file   = "val_images.pt"
-    val_target_file   = "val_target.pt"
-    test_images_file  = "test_images.pt"
-    test_target_file  = "test_target.pt"
-
-    dataset = FruitDataset(raw_data_path)
-    dataset.preprocess(
-        output_folder=output_folder,
-        train_images_file=train_images_file, train_target_file=train_target_file,
-        val_images_file=val_images_file,     val_target_file=val_target_file,
-        test_images_file=test_images_file,   test_target_file=test_target_file
-    )
-    print("Data preprocessed! Saved to:", output_folder)
-
-preprocess()
+@hydra.main(version_base=None, config_path="../../configs", config_name="config")
+def preprocess(cfg) -> None:
+    print("Preprocessing data...")
+    dataset_class = globals()[cfg.dataset.preprocess_class]
+    dataset = dataset_class(cfg.dataset.data_dir)
+    dataset.preprocess(**cfg.dataset.processed_files)
+    print("Data preprocessed!")
+    
+if __name__ == "__main__":
+    preprocess()
