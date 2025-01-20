@@ -3,7 +3,7 @@ requires = ["setuptools"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "food_classification"
+name = "fruit_vegetable_classification"
 version = "0.0.1"
 description = "A short description of the project."
 authors = [
@@ -27,6 +27,8 @@ dev = {file = ['requirements_dev.txt']}
 
 [tool.ruff]
 line-length = 120
+lint.select = ["D"]
+lint.ignore = ["D417", "D203", "D213"]
 
 [tool.coverage.run]
 omit = ["tests/*"]

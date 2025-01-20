@@ -1,6 +1,6 @@
 # config.yaml
 defaults:
-  - dataset: Fruit
+  - dataset: fruit_vegetable
   - experiment: exp1
   - model: resnet_model
   - optimizer: adam

@@ -1,6 +1,6 @@
 from torch.utils.data import Dataset
 
-from food_classification.data import MyDataset
+from fruit_vegetable_classification.data import MyDataset
 
 
 def test_my_dataset():

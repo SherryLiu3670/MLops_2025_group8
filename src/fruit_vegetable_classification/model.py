@@ -1,11 +1,10 @@
+"""Model definitions for multiple architectures, including MyAwesomeModel, ResNetModel, and MobileNetModel."""
+
 import torch
 from torch import nn
 from torch.nn import functional as F
-
-import torch
-import torch.nn as nn
-import torch.nn.functional as F
 from torchvision import models
+
 
 class MyAwesomeModel(nn.Module):
     """Dynamic model definition."""
@@ -18,6 +17,7 @@ class MyAwesomeModel(nn.Module):
         activation: str = "ReLU",
         dropout_p: float = 0.2,
     ) -> None:
+        """Initialize the model with given parameters."""
         super().__init__()
 
         # Store layers
@@ -41,7 +41,7 @@ class MyAwesomeModel(nn.Module):
         self.logsoftmax = nn.LogSoftmax(dim=1)
 
     def forward(self, x):
-        # Forward through convolutional layers
+        """Forward pass through the model."""
         for conv in self.conv_layers:
             x = self.activation(conv(x))
             x = F.max_pool2d(x, 2, 2)
@@ -58,9 +58,12 @@ class MyAwesomeModel(nn.Module):
 
         return x
 
+
 class ResNetModel(nn.Module):
+    """ResNet model definition."""
+
     def __init__(self, input_channels=1, model_type="resnet18", num_classes=36, pretrained=True):
-        
+        """Initialize the ResNet model with given parameters."""
         super(ResNetModel, self).__init__()
 
         if model_type == "resnet18":
@@ -71,17 +74,20 @@ class ResNetModel(nn.Module):
             self.resnet = models.resnet50(pretrained=pretrained)
         else:
             raise ValueError(f"Invalid model_type: {model_type}. Choose from 'resnet18', 'resnet34', 'resnet50'.")
-        
+
         self.resnet.conv1 = nn.Conv2d(input_channels, 64, kernel_size=7, stride=2, padding=3, bias=False)
         self.resnet.fc = nn.Linear(self.resnet.fc.in_features, num_classes)
 
     def forward(self, x):
+        """Forward pass through the model."""
         return self.resnet(x)
-    
+
 
 class MobileNetModel(nn.Module):
+    """MobileNet model definition."""
+
     def __init__(self, input_channels=1, model_type="mobilenetV2", num_classes=36, pretrained=True):
-        
+        """Initialize the MobileNet model with given parameters."""
         super(MobileNetModel, self).__init__()
 
         if model_type == "mobilenetV2":
@@ -94,8 +100,10 @@ class MobileNetModel(nn.Module):
             self.mobilenet = models.mobilenet_v3_small(pretrained=pretrained)
             first_layer = self.mobilenet.features[0][0]
         else:
-            raise ValueError(f"Invalid model_type: {model_type}. Choose from 'mobilenetV2', 'mobilenetV3L', 'mobilenetV3S'.")
-        
+            raise ValueError(
+                f"Invalid model_type: {model_type}. Choose from 'mobilenetV2', 'mobilenetV3L', 'mobilenetV3S'."
+            )
+
         # Extract the first layer (ConvBNReLU)
         first_layer = self.mobilenet.features[0]
         conv_layer = first_layer[0]  # Access the Conv2d layer inside ConvBNReLU
@@ -107,20 +115,22 @@ class MobileNetModel(nn.Module):
             kernel_size=conv_layer.kernel_size,
             stride=conv_layer.stride,
             padding=conv_layer.padding,
-            bias=conv_layer.bias
+            bias=conv_layer.bias,
         )
 
         # Create a new ConvBNReLU with the modified Conv2d
         self.mobilenet.features[0] = nn.Sequential(
             new_conv,
-            first_layer[1]  # Keep the original BatchNorm and activation
+            first_layer[1],  # Keep the original BatchNorm and activation
         )
-        
+
         self.mobilenet.classifier[1] = nn.Linear(self.mobilenet.last_channel, num_classes)
 
     def forward(self, x):
+        """Forward pass through the model."""
         return self.mobilenet(x)
-    
+
+
 if __name__ == "__main__":
     model = MyAwesomeModel()
     print(f"Model architecture: {model}")

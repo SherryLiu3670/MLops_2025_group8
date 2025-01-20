@@ -1,12 +1,14 @@
+"""Test a model on a dataset."""
 import os
-from pathlib import Path
-import torch
-from torch.utils.data import DataLoader
-from hydra.utils import get_original_cwd
+
 import hydra
+import torch
+import torchvision.transforms as transforms
+from hydra.utils import get_original_cwd
+from torch.utils.data import DataLoader
+
 import data
 
-import torchvision.transforms as transforms
 
 @hydra.main(config_path="../../configs", config_name="config")
 def test(cfg) -> None:
@@ -21,12 +23,14 @@ def test(cfg) -> None:
     model = hydra.utils.instantiate(cfg.model.model_config).to(device)
     model.load_state_dict(torch.load(model_checkpoint, map_location=device))
     model.eval()
-    
-    # preparing training dataset   
+
+    # preparing training dataset
     if "desired_input_resolution" in cfg.model:
-        transform = transforms.Compose([
-            transforms.Resize((cfg.model.desired_input_resolution)),  # Resize to datasets' native resolution
-        ])
+        transform = transforms.Compose(
+            [
+                transforms.Resize((cfg.model.desired_input_resolution)),  # Resize to datasets' native resolution
+            ]
+        )
     else:
         transform = None
 

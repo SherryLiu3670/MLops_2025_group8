@@ -1,3 +1,3 @@
 ## Documentation
 
-Documentation for food_classification
+Documentation for fruit_vegetable_classification
