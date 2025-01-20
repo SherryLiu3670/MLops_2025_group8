@@ -3,7 +3,7 @@ import os
 from invoke import Context, task
 
 WINDOWS = os.name == "nt"
-PROJECT_NAME = "food_classification"
+PROJECT_NAME = "fruit_vegetable_classification"
 PYTHON_VERSION = "3.11"
 
 # Setup commands

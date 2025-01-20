@@ -1,12 +1,12 @@
-data_dir: data/raw/Fruit
+data_dir: data/raw/fruit_vegetable
 input_channels: 3
 labels:
 - apple
 - banana
-name: Fruit
-preprocess_class: FruitDataset
+name: FruitVegetable
+preprocess_class: FruitVegetableDataset
 process_config:
-  output_folder: data/processed/Fruit
+  output_folder: data/processed/fruit_vegetable
   partial: true
   test_images_file: test_images.pt
   test_target_file: test_target.pt
@@ -14,6 +14,6 @@ process_config:
   train_target_file: train_target.pt
   val_images_file: val_images.pt
   val_target_file: val_targets.pt
-test_class: FruitTestDataset
-train_class: FruitTrainDataset
-val_class: FruitValDataset
+test_class: FruitVegetableTestDataset
+train_class: FruitVegetableTrainDataset
+val_class: FruitVegetableValDataset

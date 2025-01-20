@@ -126,7 +126,7 @@ class MNISTDataset:
         torch.save(test_target, f"{output_folder}/{test_target_file}")
 
 
-class FruitTestDataset(Dataset):
+class FruitVegetableTestDataset(Dataset):
     """Custom dataset for testing."""
 
     def __init__(self, **preprocessed_dict) -> None:
@@ -155,7 +155,7 @@ class FruitTestDataset(Dataset):
         return self.test_images[index], self.test_target[index]
 
 
-class FruitValDataset(Dataset):
+class FruitVegetableValDataset(Dataset):
     """Custom dataset for validation."""
 
     def __init__(self, **preprocessed_dict) -> None:
@@ -182,7 +182,7 @@ class FruitValDataset(Dataset):
         return self.val_images[index], self.val_targets[index]
 
 
-class FruitTrainDataset(Dataset):
+class FruitVegetableTrainDataset(Dataset):
     """Custom dataset for training."""
 
     def __init__(self, **preprocessed_dict) -> None:
@@ -211,7 +211,7 @@ class FruitTrainDataset(Dataset):
         return self.train_images[index], self.train_target[index]
 
 
-class FruitDataset:
+class FruitVegetableDataset:
     """Class to preprocess and hold train and test datasets."""
 
     def __init__(self, raw_data_path: Path) -> None:
@@ -247,25 +247,25 @@ class FruitDataset:
             data_config = {"labels": folder_names[:2]}
 
         # Path to the YAML file
-        yaml_file_path = "configs/dataset/Fruit.yaml"
+        yaml_file_path = "configs/dataset/fruit_vegetable.yaml"
 
         # Load the existing YAML data
         with open(yaml_file_path, "r") as f:
-            fruit_config = yaml.safe_load(f)
+            fruit_vegetable_config = yaml.safe_load(f)
 
         # Ensure the file content is a dictionary
-        if fruit_config is None:
-            fruit_config = {}
+        if fruit_vegetable_config is None:
+            fruit_vegetable_config = {}
 
         # Remove the "labels" key if it exists
-        fruit_config.pop("labels", None)
+        fruit_vegetable_config.pop("labels", None)
 
         # Append with the new labels
-        fruit_config.update(data_config)
+        fruit_vegetable_config.update(data_config)
 
         # Write the updated content back to the YAML file
         with open(yaml_file_path, "w") as f:
-            yaml.dump(fruit_config, f)
+            yaml.dump(fruit_vegetable_config, f)
 
         return data_config["labels"]
 
