@@ -37,12 +37,12 @@ def train(cfg) -> None:
         transform = None
 
     train_dataset_class = getattr(data, cfg.dataset.train_class)
-    train_set = train_dataset_class(**cfg.dataset.processed_files, transform=transform)
+    train_set = train_dataset_class(**cfg.dataset.process_config, transform=transform)
     
-    train_dataloader = torch.utils.data.DataLoader(train_set, batch_size=batch_size)
+    train_dataloader = torch.utils.data.DataLoader(train_set, batch_size=batch_size, shuffle=True) 
     
     validate_dataset_class = getattr(data, cfg.dataset.test_class)
-    validate_set = validate_dataset_class(**cfg.dataset.processed_files)
+    validate_set = validate_dataset_class(**cfg.dataset.process_config)
     validate_dataloader = torch.utils.data.DataLoader(validate_set, batch_size=batch_size)
 
     loss_fn = hydra.utils.instantiate(cfg.loss)

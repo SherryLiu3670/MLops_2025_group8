@@ -1,15 +1,19 @@
-# fruit data configuration to specify the data path and other parameters
+data_dir: data/raw/Fruit
+labels:
+- apple
+- banana
 name: Fruit
 preprocess_class: FruitDataset
-train_class: FruitTrainDataset
-test_class: FruitTestDataset
-val_class: FruitValDataset
-data_dir: data/raw/Fruit
-processed_files:
+input_channels: 3
+process_config:
   output_folder: data/processed/Fruit
-  train_images_file: train_images.pt
-  train_target_file: train_target.pt
+  partial: true
   test_images_file: test_images.pt
   test_target_file: test_target.pt
+  train_images_file: train_images.pt
+  train_target_file: train_target.pt
   val_images_file: val_images.pt
   val_target_file: val_targets.pt
+test_class: FruitTestDataset
+train_class: FruitTrainDataset
+val_class: FruitValDataset

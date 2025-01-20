@@ -1,5 +1,6 @@
 import os
 from pathlib import Path
+import shutil
 
 import torch
 from torch.utils.data import Dataset
@@ -7,6 +8,9 @@ from hydra.utils import get_original_cwd
 import torchvision.transforms as T
 from PIL import Image
 import hydra
+
+import kagglehub
+import yaml
 
 def normalize(images: torch.Tensor) -> torch.Tensor:
     """Normalize images."""
@@ -127,8 +131,6 @@ class FruitTestDataset(Dataset):
         
         test_images_path = f"../../../{output_folder}/{test_images_file}"
         test_target_path = f"../../../{output_folder}/{test_target_file}"
-
-        #pdb.set_trace()
             
         if not os.path.exists(test_images_path) or not os.path.exists(test_target_path):
             raise FileNotFoundError("Preprocessing step should be executed first")
@@ -216,21 +218,70 @@ class FruitDataset:
         self.train_set = None
         self.test_set = None
         self.validation_set = None
+        self.kaggle_dataset_identifier = "kritikseth/fruit-and-vegetable-image-recognition/versions/8"
+        self.class_names = None
 
-    def _read_images_from_folder(self, folder: Path):
+    def download_data(self, output_folder: Path) -> None:
+        print("Downloading data...")
+        try:
+            # downloading dataset from kaggle
+            path = kagglehub.dataset_download(self.kaggle_dataset_identifier)
+            # moving the downloaded dataset to the output folder
+            shutil.move(path, str(output_folder))
+            print(f"Data downloaded and saved to {str(output_folder)}")
+            
+        except Exception as e:
+            print(f"Error downloading data: {e}")
+
+    # fetch labels from the folder names
+    def fetch_labels(self, directory_path: Path, partial: bool = False) -> None:
+        folder_names = [
+            folder for folder in os.listdir(directory_path)
+            if os.path.isdir(os.path.join(directory_path, folder))
+        ]
+
+        # Create a data configuration dictionary
+        if partial is False:
+            data_config = {"labels": folder_names}
+        else:
+            data_config = {"labels": folder_names[:2]}
+        
+        # Path to the YAML file
+        yaml_file_path = "configs/dataset/Fruit.yaml"
+
+        # Load the existing YAML data
+        with open(yaml_file_path, "r") as f:
+            fruit_config = yaml.safe_load(f)
+
+        # Ensure the file content is a dictionary
+        if fruit_config is None:
+            fruit_config = {}
+
+        # Remove the "labels" key if it exists
+        fruit_config.pop("labels", None)
+
+        # Append with the new labels
+        fruit_config.update(data_config)
+
+        # Write the updated content back to the YAML file
+        with open(yaml_file_path, "w") as f:
+            yaml.dump(fruit_config, f)
+
+        return data_config["labels"]
+
+    def _read_images_from_folder(self, folder: Path) -> tuple:
     
         images_list = []
         targets_list = []
 
-        class_names = sorted([d.name for d in folder.iterdir() if d.is_dir()])
-        class_to_idx = {cls_name: idx for idx, cls_name in enumerate(class_names)}
+        class_to_idx = {cls_name: idx for idx, cls_name in enumerate(self.class_names)}
 
         transform = T.Compose([
             T.Resize((224, 224)),  
             T.ToTensor(),         
         ])
 
-        for cls_name in class_names:
+        for cls_name in self.class_names:
             cls_dir = folder / cls_name
             for img_name in os.listdir(cls_dir):
                 if img_name.lower().endswith('.jpg'):
@@ -248,7 +299,16 @@ class FruitDataset:
                    output_folder: str,
                    train_images_file: str, train_target_file: str, 
                    val_images_file: str,   val_target_file: str,
-                   test_images_file: str,  test_target_file: str) -> None:
+                   test_images_file: str,  test_target_file: str,
+                   partial: bool) -> None:
+
+        if not os.path.exists(self.data_path):
+            self.download_data(self.data_path)
+        else:
+            print("Skipping download as data already exists. If you want to re-download, delete the raw dataset folder.")
+
+        self.class_names = self.fetch_labels(os.path.join(self.data_path, "train"), partial=partial)
+
 
         # 1) train
         train_folder = self.data_path / "train"
@@ -291,7 +351,7 @@ def preprocess(cfg) -> None:
     print("Preprocessing data...")
     dataset_class = globals()[cfg.dataset.preprocess_class]
     dataset = dataset_class(cfg.dataset.data_dir)
-    dataset.preprocess(**cfg.dataset.processed_files)
+    dataset.preprocess(**cfg.dataset.process_config)
     print("Data preprocessed!")
     
 if __name__ == "__main__":
