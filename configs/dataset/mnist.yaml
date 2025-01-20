@@ -2,6 +2,7 @@
 name: mnist
 preprocess_class: MNISTDataset
 train_class: MNISTTrainDataset
+val_class: MNISTTestDataset
 test_class: MNISTTestDataset
 data_dir: data/raw/mnist
 input_resolution: [28, 28]
