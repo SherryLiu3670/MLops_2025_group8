@@ -80,6 +80,6 @@ def test_training_statistics_plot(cfg):
     try:
         train.train(cfg)
         output_path = os.getcwd()
-        assert os.path.exists(os.path.join(output_path,"../../reports/figures/training_statistics.png")), "Training statistics plot should be generated."
+        assert os.path.exists(os.path.join(output_path,"reports/figures/training_statistics.png")), "Training statistics plot should be generated."
     except Exception as e:
         pytest.fail(f"Training statistics plot generation failed: {e}")
