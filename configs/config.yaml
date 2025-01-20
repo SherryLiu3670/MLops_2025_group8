@@ -1,6 +1,6 @@
 # config.yaml
 defaults:
-  - dataset: mnist
+  - dataset: Fruit
   - experiment: exp1
   - model: resnet_model
   - optimizer: adam

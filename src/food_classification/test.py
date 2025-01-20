@@ -31,7 +31,7 @@ def test(cfg) -> None:
         transform = None
 
     test_dataset_class = getattr(data, cfg.dataset.test_class)
-    test_set = test_dataset_class(**cfg.dataset.processed_files, transform=transform)
+    test_set = test_dataset_class(**cfg.dataset.process_config, transform=transform)
     test_dataloader = DataLoader(test_set, batch_size=batch_size)
 
     loss_fn = hydra.utils.instantiate(cfg.loss)
