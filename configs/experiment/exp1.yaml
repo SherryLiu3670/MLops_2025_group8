@@ -1,4 +1,5 @@
 lr: 1e-3
 batch_size: 32
 epochs: 10
-device: cuda
+device: cpu
+modelpath: outputs/2025-01-16/14-52-09/best_model.pth
