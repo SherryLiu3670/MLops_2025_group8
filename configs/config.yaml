@@ -2,6 +2,6 @@
 defaults:
   - dataset: mnist
   - experiment: exp1
-  - model: awesome_model
+  - model: resnet_model
   - optimizer: adam
   - loss: cross_entropy

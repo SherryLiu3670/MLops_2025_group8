@@ -3,9 +3,8 @@ import matplotlib.pyplot as plt
 import torch
 import typer
 import data
-# from . import data
-# from . import model as models
 
+import torchvision.transforms as transforms
 
 @hydra.main(config_path="../../configs", config_name="config")
 def train(cfg) -> None:
@@ -25,13 +24,23 @@ def train(cfg) -> None:
     print(f"{lr=}, {batch_size=}, {epochs=}")
 
     # instead of fixating the model, we can use the config file to define the model
-    model = hydra.utils.instantiate(cfg.model).to(device)
+    # replace models input_channels parameter with the number of channels in the dataset keeping hydra.utils.instantiate(cfg.model) as is
+    cfg.model.model_config.input_channels = cfg.dataset.input_channels
+    model = hydra.utils.instantiate(cfg.model.model_config).to(device)
 
     # preparing training dataset   
-    train_dataset_class = getattr(data, cfg.dataset.train_class)
-    train_set = train_dataset_class(**cfg.dataset.processed_files)
-    train_dataloader = torch.utils.data.DataLoader(train_set, batch_size=batch_size)
+    if "desired_input_resolution" in cfg.model:
+        transform = transforms.Compose([
+            transforms.Resize((cfg.model.desired_input_resolution)),  # Resize to datasets' native resolution
+        ])
+    else:
+        transform = None
 
+    train_dataset_class = getattr(data, cfg.dataset.train_class)
+    train_set = train_dataset_class(**cfg.dataset.processed_files, transform=transform)
+    
+    train_dataloader = torch.utils.data.DataLoader(train_set, batch_size=batch_size)
+    
     validate_dataset_class = getattr(data, cfg.dataset.test_class)
     validate_set = validate_dataset_class(**cfg.dataset.processed_files)
     validate_dataloader = torch.utils.data.DataLoader(validate_set, batch_size=batch_size)
