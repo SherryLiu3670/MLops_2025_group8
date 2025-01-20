@@ -1,15 +1,15 @@
+"""Train a model for classification task."""
 import hydra
 import matplotlib.pyplot as plt
 import torch
-import data
-
 import torchvision.transforms as transforms
+
+import data
 
 
 @hydra.main(config_path="../../configs", config_name="config")
 def train(cfg) -> None:
-    """Train a model on MNIST."""
-
+    """Train a model for classification task."""
     lr = cfg.experiment.lr
     batch_size = cfg.experiment.batch_size
     epochs = cfg.experiment.epochs

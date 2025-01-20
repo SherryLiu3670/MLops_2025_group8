@@ -1,14 +1,17 @@
+"""Preprocesses the data for the fruit and vegetable classification task."""
+
 import os
-from pathlib import Path
 import shutil
-import torch
-from torch.utils.data import Dataset
-from hydra.utils import get_original_cwd
-import torchvision.transforms as T
-from PIL import Image
+from pathlib import Path
+
 import hydra
 import kagglehub
+import torch
+import torchvision.transforms as T
 import yaml
+from hydra.utils import get_original_cwd
+from PIL import Image
+from torch.utils.data import Dataset
 
 
 def normalize(images: torch.Tensor) -> torch.Tensor:
@@ -20,6 +23,7 @@ class MNISTTrainDataset(Dataset):
     """Custom dataset for training."""
 
     def __init__(self, **preprocessed_dict) -> None:
+        """Initialize the dataset with the preprocessed data."""
         output_folder = preprocessed_dict["output_folder"]
         train_images_file = preprocessed_dict["train_images_file"]
         train_target_file = preprocessed_dict["train_target_file"]
@@ -52,6 +56,7 @@ class MNISTTestDataset(Dataset):
     """Custom dataset for testing."""
 
     def __init__(self, **preprocessed_dict) -> None:
+        """Initialize the dataset with the preprocessed data."""
         output_folder = preprocessed_dict["output_folder"]
         test_images_file = preprocessed_dict["test_images_file"]
         test_target_file = preprocessed_dict["test_target_file"]
@@ -85,6 +90,7 @@ class MNISTDataset:
     """Class to preprocess and hold train and test datasets."""
 
     def __init__(self, raw_data_path: Path) -> None:
+        """Initialize the dataset with the raw data path."""
         self.data_path = raw_data_path
         self.train_set = None
         self.test_set = None
@@ -130,6 +136,7 @@ class FruitVegetableTestDataset(Dataset):
     """Custom dataset for testing."""
 
     def __init__(self, **preprocessed_dict) -> None:
+        """Initialize the dataset with the preprocessed data."""
         output_folder = preprocessed_dict["output_folder"]
         test_images_file = preprocessed_dict["test_images_file"]
         test_target_file = preprocessed_dict["test_target_file"]
@@ -159,6 +166,7 @@ class FruitVegetableValDataset(Dataset):
     """Custom dataset for validation."""
 
     def __init__(self, **preprocessed_dict) -> None:
+        """Initialize the dataset with the preprocessed data."""
         output_folder = preprocessed_dict["output_folder"]
         val_images_file = preprocessed_dict["val_images_file"]
         val_target_file = preprocessed_dict["val_target_file"]
@@ -176,9 +184,11 @@ class FruitVegetableValDataset(Dataset):
         self.val_targets = val_targets
 
     def __len__(self) -> int:
+        """Return the length of the validation dataset."""
         return len(self.val_images)
 
     def __getitem__(self, index: int):
+        """Return a given sample from the validation dataset."""
         return self.val_images[index], self.val_targets[index]
 
 
@@ -186,6 +196,7 @@ class FruitVegetableTrainDataset(Dataset):
     """Custom dataset for training."""
 
     def __init__(self, **preprocessed_dict) -> None:
+        """Initialize the dataset with the preprocessed data."""
         output_folder = preprocessed_dict["output_folder"]
         train_images_file = preprocessed_dict["train_images_file"]
         train_target_file = preprocessed_dict["train_target_file"]
@@ -215,6 +226,7 @@ class FruitVegetableDataset:
     """Class to preprocess and hold train and test datasets."""
 
     def __init__(self, raw_data_path: Path) -> None:
+        """Initialize the dataset with the raw data path."""
         self.data_path = Path(raw_data_path)
         self.train_set = None
         self.test_set = None
@@ -223,6 +235,7 @@ class FruitVegetableDataset:
         self.class_names = None
 
     def download_data(self, output_folder: Path) -> None:
+        """Download the dataset from Kaggle and save it to the output folder."""
         print("Downloading data...")
         try:
             # downloading dataset from kaggle
@@ -235,7 +248,8 @@ class FruitVegetableDataset:
             print(f"Error downloading data: {e}")
 
     # fetch labels from the folder names
-    def fetch_labels(self, directory_path: Path, partial: bool = False) -> None:
+    def fetch_labels(self, directory_path: Path, partial: bool = False) -> list[str]:
+        """Fetch the labels from the folder names and update the YAML file."""
         folder_names = [
             folder for folder in os.listdir(directory_path) if os.path.isdir(os.path.join(directory_path, folder))
         ]
@@ -307,6 +321,7 @@ class FruitVegetableDataset:
         test_target_file: str,
         partial: bool,
     ) -> None:
+        """Preprocess the raw data and save it to the output folder."""
         if not os.path.exists(self.data_path):
             self.download_data(self.data_path)
         else:
@@ -350,6 +365,7 @@ class FruitVegetableDataset:
 
 @hydra.main(version_base=None, config_path="../../configs", config_name="config")
 def preprocess(cfg) -> None:
+    """Preprocess the data."""
     print("Preprocessing data...")
     dataset_class = globals()[cfg.dataset.preprocess_class]
     dataset = dataset_class(cfg.dataset.data_dir)

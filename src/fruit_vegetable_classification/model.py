@@ -1,3 +1,5 @@
+"""Model definitions for multiple architectures, including MyAwesomeModel, ResNetModel, and MobileNetModel."""
+
 import torch
 from torch import nn
 from torch.nn import functional as F
@@ -15,6 +17,7 @@ class MyAwesomeModel(nn.Module):
         activation: str = "ReLU",
         dropout_p: float = 0.2,
     ) -> None:
+        """Initialize the model with given parameters."""
         super().__init__()
 
         # Store layers
@@ -38,7 +41,7 @@ class MyAwesomeModel(nn.Module):
         self.logsoftmax = nn.LogSoftmax(dim=1)
 
     def forward(self, x):
-        # Forward through convolutional layers
+        """Forward pass through the model."""
         for conv in self.conv_layers:
             x = self.activation(conv(x))
             x = F.max_pool2d(x, 2, 2)
@@ -57,7 +60,10 @@ class MyAwesomeModel(nn.Module):
 
 
 class ResNetModel(nn.Module):
+    """ResNet model definition."""
+
     def __init__(self, input_channels=1, model_type="resnet18", num_classes=36, pretrained=True):
+        """Initialize the ResNet model with given parameters."""
         super(ResNetModel, self).__init__()
 
         if model_type == "resnet18":
@@ -73,11 +79,15 @@ class ResNetModel(nn.Module):
         self.resnet.fc = nn.Linear(self.resnet.fc.in_features, num_classes)
 
     def forward(self, x):
+        """Forward pass through the model."""
         return self.resnet(x)
 
 
 class MobileNetModel(nn.Module):
+    """MobileNet model definition."""
+
     def __init__(self, input_channels=1, model_type="mobilenetV2", num_classes=36, pretrained=True):
+        """Initialize the MobileNet model with given parameters."""
         super(MobileNetModel, self).__init__()
 
         if model_type == "mobilenetV2":
@@ -117,6 +127,7 @@ class MobileNetModel(nn.Module):
         self.mobilenet.classifier[1] = nn.Linear(self.mobilenet.last_channel, num_classes)
 
     def forward(self, x):
+        """Forward pass through the model."""
         return self.mobilenet(x)
 
 

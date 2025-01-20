@@ -1,11 +1,13 @@
+"""Test a model on a dataset."""
 import os
-import torch
-from torch.utils.data import DataLoader
-from hydra.utils import get_original_cwd
-import hydra
-import data
 
+import hydra
+import torch
 import torchvision.transforms as transforms
+from hydra.utils import get_original_cwd
+from torch.utils.data import DataLoader
+
+import data
 
 
 @hydra.main(config_path="../../configs", config_name="config")
