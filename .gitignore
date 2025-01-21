@@ -177,9 +177,9 @@ cython_debug/
 #.idea/
 
 # Raw data
-data/raw/fruit_vegetable
-data/raw/Fruit/
-# should actually ignore data/raw but we still need to remove mnist from the tracked files
+# ignore all data/raw but keep mnist in the tracked files
+data/raw/
+!data/raw/mnist/
 
 # Preprocessed data
 data/processed
