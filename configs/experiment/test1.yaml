@@ -1,0 +1,6 @@
+name: test_wandb
+lr: 1e-3
+batch_size: 32
+epochs: 10
+device: cpu
+modelpath: outputs/2025-01-20/15-33-27/best_model.pth

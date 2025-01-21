@@ -1,7 +1,7 @@
 # config.yaml
 defaults:
   - dataset: fruit_vegetable
-  - experiment: exp1
+  - experiment: test1
   - model: resnet_model
   - optimizer: adam
   - loss: cross_entropy
