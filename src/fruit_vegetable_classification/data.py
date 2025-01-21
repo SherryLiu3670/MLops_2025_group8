@@ -10,7 +10,6 @@ import kagglehub
 import torch
 import torchvision.transforms as T
 import yaml
-from hydra.utils import get_original_cwd
 from PIL import Image
 from torch.utils.data import Dataset
 
@@ -28,7 +27,7 @@ class MNISTTrainDataset(Dataset):
         output_folder = preprocessed_dict["output_folder"]
         train_images_file = preprocessed_dict["train_images_file"]
         train_target_file = preprocessed_dict["train_target_file"]
-        project_root = get_original_cwd()
+        project_root = os.getcwd()
         output_path = os.path.join(project_root, output_folder)
         train_images_path = os.path.abspath(os.path.join(output_path, train_images_file))
         train_target_path = os.path.abspath(os.path.join(output_path, train_target_file))
@@ -61,7 +60,7 @@ class MNISTTestDataset(Dataset):
         output_folder = preprocessed_dict["output_folder"]
         test_images_file = preprocessed_dict["test_images_file"]
         test_target_file = preprocessed_dict["test_target_file"]
-        project_root = get_original_cwd()
+        project_root = os.getcwd()
         output_path = os.path.join(project_root, output_folder)
         test_images_path = os.path.abspath(os.path.join(output_path, test_images_file))
         test_target_path = os.path.abspath(os.path.join(output_path, test_target_file))

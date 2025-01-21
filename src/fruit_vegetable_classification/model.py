@@ -1,5 +1,6 @@
 """Model definitions for multiple architectures, including MyAwesomeModel, ResNetModel, and MobileNetModel."""
 
+from typing import List
 import torch
 from torch import nn
 from torch.nn import functional as F
@@ -12,8 +13,8 @@ class MyAwesomeModel(nn.Module):
     def __init__(
         self,
         input_channels: int = 1,
-        conv_layers: list = [(32, 3, 1), (64, 3, 1), (128, 3, 1)],  # [(out_channels, kernel_size, stride), ...]
-        fc_layers: list = [64, 10],  # Fully connected layer sizes
+        conv_layers: List = [(32, 3, 1), (64, 3, 1), (128, 3, 1)],  # [(out_channels, kernel_size, stride), ...]
+        fc_layers: List = [64, 10],  # Fully connected layer sizes
         activation: str = "ReLU",
         dropout_p: float = 0.2,
     ) -> None:
