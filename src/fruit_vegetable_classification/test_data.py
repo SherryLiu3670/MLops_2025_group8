@@ -15,9 +15,7 @@ from fruit_vegetable_classification.data import (
 
 @pytest.mark.parametrize("shape", [(8, 3, 224, 224), (16, 1, 28, 28)])
 def test_normalize(shape):
-    """
-    测试 normalize 函数输出是否近似满足零均值、单位标准差。
-    """
+
     images = torch.randn(*shape)
     normed = normalize(images)
     mean = normed.mean().item()
@@ -29,19 +27,15 @@ def test_normalize(shape):
 
 @pytest.fixture
 def mnist_sample_data(tmp_path):
-    """
-    通过 fixture 创建 MNIST 风格的随机模拟数据并写入临时文件。
-    返回相关路径和原始 Tensor 供后续测试使用。
-    """
-    # 随机生成一些模拟的 MNIST 数据 (N=10)
+    
     train_images = torch.randn(10, 1, 28, 28)
     train_targets = torch.randint(low=0, high=10, size=(10,))
 
-    # 存储文件名
+    
     train_images_file = "train_images.pt"
     train_target_file = "train_targets.pt"
 
-    # 写入临时目录
+    
     train_images_path = tmp_path / train_images_file
     train_targets_path = tmp_path / train_target_file
 
@@ -58,11 +52,9 @@ def mnist_sample_data(tmp_path):
 
 
 def test_mnist_train_dataset_file_not_found():
-    """
-    当指定的路径不存在时，应抛出 FileNotFoundError。
-    """
+
     with pytest.raises(FileNotFoundError):
-        # 这里给一个不存在的路径
+        
         MNISTTrainDataset(
             output_folder="non_existent_folder",
             train_images_file="dummy.pt",
@@ -71,10 +63,8 @@ def test_mnist_train_dataset_file_not_found():
 
 
 def test_mnist_train_dataset_len_and_getitem(mnist_sample_data):
-    """
-    测试 MNISTTrainDataset 的 __len__ 和 __getitem__。
-    """
-    # 利用 fixture 创建好的临时数据
+ 
+    
     preprocessed_dict = {
         "output_folder": mnist_sample_data["output_folder"],
         "train_images_file": mnist_sample_data["train_images_file"],
@@ -82,19 +72,17 @@ def test_mnist_train_dataset_len_and_getitem(mnist_sample_data):
     }
     dataset = MNISTTrainDataset(**preprocessed_dict)
 
-    assert len(dataset) == 10, "MNISTTrainDataset 长度应为 10"
+    assert len(dataset) == 10, "MNISTTrainDataset 10"
 
     first_item = dataset[0]
-    assert isinstance(first_item, tuple), "getitem 的返回值应为 (image_tensor, target)"
-    assert first_item[0].shape == (1, 28, 28), "图像尺寸应为 (1, 28, 28)"
-    assert 0 <= first_item[1].item() < 10, "标签应该在 [0, 9] 之间"
+    assert isinstance(first_item, tuple), "getitem is (image_tensor, target)"
+    assert first_item[0].shape == (1, 28, 28), "size (1, 28, 28)"
+    assert 0 <= first_item[1].item() < 10, "label [0, 9] "
 
 
 @pytest.fixture
 def mnist_test_sample_data(tmp_path):
-    """
-    生成 MNIST 测试集模拟数据并写入临时文件。
-    """
+ 
     test_images = torch.randn(5, 1, 28, 28)
     test_targets = torch.randint(low=0, high=10, size=(5,))
 
@@ -117,9 +105,7 @@ def mnist_test_sample_data(tmp_path):
 
 
 def test_mnist_test_dataset_file_not_found():
-    """
-    当指定的测试文件路径不存在时，应抛出 FileNotFoundError。
-    """
+
     with pytest.raises(FileNotFoundError):
         MNISTTestDataset(
             output_folder="non_existent_folder",
@@ -129,9 +115,7 @@ def test_mnist_test_dataset_file_not_found():
 
 
 def test_mnist_test_dataset_len_and_getitem(mnist_test_sample_data):
-    """
-    测试 MNISTTestDataset 的 __len__ 和 __getitem__。
-    """
+ 
     preprocessed_dict = {
         "output_folder": mnist_test_sample_data["output_folder"],
         "test_images_file": mnist_test_sample_data["test_images_file"],
@@ -149,9 +133,7 @@ def test_mnist_test_dataset_len_and_getitem(mnist_test_sample_data):
 
 @pytest.fixture
 def fruit_veg_sample_data(tmp_path):
-    """
-    生成 Fruit & Vegetable 模拟数据 (train, val, test)，存到临时文件。
-    """
+ 
     train_images = torch.randn(6, 3, 224, 224)
     train_targets = torch.randint(0, 5, (6,))  # 假设有 5 个类别
     val_images = torch.randn(4, 3, 224, 224)
@@ -192,9 +174,7 @@ def fruit_veg_sample_data(tmp_path):
 
 
 def test_fruit_vegetable_train_dataset_file_not_found():
-    """
-    测试当文件不存在时，FruitVegetableTrainDataset 是否会抛出 FileNotFoundError。
-    """
+ 
     with pytest.raises(FileNotFoundError):
         FruitVegetableTrainDataset(
             output_folder="not_exist",
@@ -204,9 +184,7 @@ def test_fruit_vegetable_train_dataset_file_not_found():
 
 
 def test_fruit_vegetable_train_dataset_len_and_getitem(fruit_veg_sample_data):
-    """
-    测试 FruitVegetableTrainDataset 的 __len__ 和 __getitem__。
-    """
+
     preprocessed_dict = {
         "output_folder": fruit_veg_sample_data["output_folder"],
         "train_images_file": fruit_veg_sample_data["train_images_file"],
@@ -221,9 +199,7 @@ def test_fruit_vegetable_train_dataset_len_and_getitem(fruit_veg_sample_data):
 
 
 def test_fruit_vegetable_val_dataset_file_not_found():
-    """
-    测试 FruitVegetableValDataset 当文件不存在时是否抛异常。
-    """
+ 
     with pytest.raises(FileNotFoundError):
         FruitVegetableValDataset(
             output_folder="not_exist",
@@ -233,9 +209,7 @@ def test_fruit_vegetable_val_dataset_file_not_found():
 
 
 def test_fruit_vegetable_val_dataset_len_and_getitem(fruit_veg_sample_data):
-    """
-    测试 FruitVegetableValDataset 的 __len__ 和 __getitem__。
-    """
+ 
     preprocessed_dict = {
         "output_folder": fruit_veg_sample_data["output_folder"],
         "val_images_file": fruit_veg_sample_data["val_images_file"],
@@ -250,9 +224,7 @@ def test_fruit_vegetable_val_dataset_len_and_getitem(fruit_veg_sample_data):
 
 
 def test_fruit_vegetable_test_dataset_file_not_found():
-    """
-    测试 FruitVegetableTestDataset 当文件不存在时是否抛异常。
-    """
+ 
     with pytest.raises(FileNotFoundError):
         FruitVegetableTestDataset(
             output_folder="not_exist",
@@ -262,9 +234,7 @@ def test_fruit_vegetable_test_dataset_file_not_found():
 
 
 def test_fruit_vegetable_test_dataset_len_and_getitem(fruit_veg_sample_data):
-    """
-    测试 FruitVegetableTestDataset 的 __len__ 和 __getitem__。
-    """
+ 
     preprocessed_dict = {
         "output_folder": fruit_veg_sample_data["output_folder"],
         "test_images_file": fruit_veg_sample_data["test_images_file"],
