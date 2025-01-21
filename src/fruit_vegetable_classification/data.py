@@ -6,6 +6,7 @@ from pathlib import Path
 from typing import List
 
 import hydra
+from hydra.utils import get_original_cwd
 import kagglehub
 import torch
 import torchvision.transforms as T
@@ -136,6 +137,18 @@ class MNISTDataset:
         torch.save(test_target, f"{output_folder}/{test_target_file}")
 
 
+def get_root_dir() -> str:
+    """Get the root directory of the project."""
+    try:
+        project_root = get_original_cwd()
+    except ValueError:  # Handle cases where hydra is not used
+        project_root = os.getcwd()
+    except Exception as e:
+        raise RuntimeError(f"Unexpected error while getting project root: {e}")
+
+    return project_root
+
+
 class FruitVegetableTestDataset(Dataset):
     """Custom dataset for testing."""
 
@@ -144,9 +157,10 @@ class FruitVegetableTestDataset(Dataset):
         output_folder = preprocessed_dict["output_folder"]
         test_images_file = preprocessed_dict["test_images_file"]
         test_target_file = preprocessed_dict["test_target_file"]
-
-        test_images_path = f"../../../{output_folder}/{test_images_file}"
-        test_target_path = f"../../../{output_folder}/{test_target_file}"
+        project_root = get_root_dir()
+        output_path = os.path.join(project_root, output_folder)
+        test_images_path = os.path.abspath(os.path.join(output_path, test_images_file))
+        test_target_path = os.path.abspath(os.path.join(output_path, test_target_file))
 
         if not os.path.exists(test_images_path) or not os.path.exists(test_target_path):
             raise FileNotFoundError("Preprocessing step should be executed first")
@@ -174,9 +188,10 @@ class FruitVegetableValDataset(Dataset):
         output_folder = preprocessed_dict["output_folder"]
         val_images_file = preprocessed_dict["val_images_file"]
         val_target_file = preprocessed_dict["val_target_file"]
-
-        val_images_path = f"../../../{output_folder}/{val_images_file}"
-        val_target_path = f"../../../{output_folder}/{val_target_file}"
+        project_root = get_root_dir()
+        output_path = os.path.join(project_root, output_folder)
+        val_images_path = os.path.abspath(os.path.join(output_path, val_images_file))
+        val_target_path = os.path.abspath(os.path.join(output_path, val_target_file))
 
         if not os.path.exists(val_images_path) or not os.path.exists(val_target_path):
             raise FileNotFoundError("Preprocessing step should be executed first")
@@ -204,9 +219,10 @@ class FruitVegetableTrainDataset(Dataset):
         output_folder = preprocessed_dict["output_folder"]
         train_images_file = preprocessed_dict["train_images_file"]
         train_target_file = preprocessed_dict["train_target_file"]
-
-        train_images_path = f"../../../{output_folder}/{train_images_file}"
-        train_target_path = f"../../../{output_folder}/{train_target_file}"
+        project_root = get_root_dir()
+        output_path = os.path.join(project_root, output_folder)
+        train_images_path = os.path.abspath(os.path.join(output_path, train_images_file))
+        train_target_path = os.path.abspath(os.path.join(output_path, train_target_file))
 
         if not os.path.exists(train_images_path) or not os.path.exists(train_target_path):
             raise FileNotFoundError("Preprocessing step should be executed first")
