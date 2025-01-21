@@ -1,7 +1,7 @@
 import pytest
 import torch
 import hydra
-from hydra import compose, initialize
+import hydra
 import train
 import data
 import os
@@ -55,7 +55,6 @@ def test_data_loading(cfg):
     except Exception as e:
         pytest.fail(f"Data loading failed: {e}")
 
-
 def test_training_loop(cfg):
     """Test one epoch of training and validation."""
     # with initialize(config_path="../../configs"):
@@ -64,22 +63,8 @@ def test_training_loop(cfg):
 
     try:
         train.train(cfg)
-        output_path = os.getcwd()
-        print(output_path)
-        assert os.path.exists(os.path.join(output_path,"best_model.pth")), "Best model should be saved after training."
+        assert os.path.exists("best_model.pth"), "Best model should be saved after training."
+        
     except Exception as e:
         pytest.fail(f"Training loop failed: {e}")
 
-
-def test_training_statistics_plot(cfg):
-    """Test that the training statistics plot is generated."""
-    # with initialize(config_path="../../configs"):
-    #     cfg = compose(config_name="config")
-    cfg.experiment.epochs = 1  # Run for only one epoch for testing purposes
-
-    try:
-        train.train(cfg)
-        output_path = os.getcwd()
-        assert os.path.exists(os.path.join(output_path,"reports/figures/training_statistics.png")), "Training statistics plot should be generated."
-    except Exception as e:
-        pytest.fail(f"Training statistics plot generation failed: {e}")

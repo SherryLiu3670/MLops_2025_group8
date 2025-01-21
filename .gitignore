@@ -186,4 +186,7 @@ models/*
 outputs/
 
 # Generated reports
-reports/*
+reports/*data/
+data/raw/Fruit/
+.dvc/
+reports/figures/training_statistics.png
