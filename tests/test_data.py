@@ -4,7 +4,7 @@ from hydra import initialize, compose
 import os
 
 import importlib.util
-from tests import _SRC_ROOT
+from tests import _SRC_ROOT, _PROJECT_ROOT
 
 # using importlib to load the data.py as module
 spec = importlib.util.spec_from_file_location("data", os.path.join(_SRC_ROOT, "data.py"))
@@ -20,6 +20,22 @@ def cfg():
         # override dataset in the main config file
         cfg = compose(config_name="config", overrides=["dataset=mnist"])
     return cfg
+
+
+def test_data_processing(cfg):
+    """Test that the data processing is set up correctly."""
+    try:
+        data_processing_class = getattr(data, cfg.dataset.preprocess_class)
+        dataset = data_processing_class(cfg.dataset.data_dir)
+        assert dataset is not None, "Data processing should not be None."
+        dataset.preprocess(**cfg.dataset.process_config)
+        # assert that cfg.dataset.process_config.output_folder has been created
+        assert os.path.exists(
+            os.path.join(_PROJECT_ROOT, cfg.dataset.process_config.output_folder)
+        ), "Preprocessed dataset folder should exist."
+
+    except Exception as e:
+        pytest.fail(f"Data processing failed: {e}")
 
 
 def test_data_loading(cfg):
