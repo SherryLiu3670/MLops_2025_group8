@@ -31,4 +31,4 @@ lint.select = ["D"]
 lint.ignore = ["D417", "D203", "D213"]
 
 [tool.coverage.run]
-omit = ["tests/*"]
+source = ["src"]
