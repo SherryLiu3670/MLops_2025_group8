@@ -3,14 +3,15 @@ import torch
 import hydra
 import train
 import os
+from hydra import compose, initialize
 
-
-config_path = "configs"
 @pytest.fixture
 def cfg():
+    """Load the config file."""
     # using pytest.fixture to load the config file
-    with hydra.initialize_config_dir(config_dir=os.path.abspath(config_path)):
-        cfg = hydra.compose(config_name="config.yaml")
+    with initialize(version_base=None, config_path="../configs"):
+        # override dataset in the main config file
+        cfg = compose(config_name="config", overrides=["dataset=mnist"])
     return cfg
 
 def test_device_selection(cfg):
