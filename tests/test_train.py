@@ -3,7 +3,6 @@ import torch
 import hydra
 import train
 import os
-import sys
 
 
 config_path = "configs"
@@ -47,12 +46,21 @@ def test_training_loop(cfg):
     def my_callback(statistics):
         nonlocal captured_statistics
         captured_statistics = statistics
-    try:
-        train.train(cfg, callback=my_callback)
-        assert captured_statistics["validation_loss"] < float("inf"), "Validation loss should be computed."
-        assert captured_statistics["validation_accuracy"] >= 0, "Validation accuracy should be computed."
-    except Exception as e:
-        pytest.fail(f"Training loop failed: {e}")
+        
+    train.train_fn(cfg, stats_callback=my_callback)
+    # Ensure captured_statistics is valid
+    assert isinstance(captured_statistics, dict), "Captured statistics must be a dictionary."
+    assert "validation_loss" in captured_statistics, "'validation_loss' key must be in captured statistics."
+    assert "validation_accuracy" in captured_statistics, "'validation_accuracy' key must be in captured statistics."
+    
+    # Validation checks
+    assert isinstance(captured_statistics["validation_loss"][0], (float, int)), "Validation loss must be a number."
+    assert captured_statistics["validation_loss"][0] < float("inf"), "Validation loss should be computed."
+    assert isinstance(captured_statistics["validation_accuracy"][0], (float, int)), "Validation accuracy must be a number."
+    assert captured_statistics["validation_accuracy"][0] >= 0, "Validation accuracy should be computed."
+    
+    # except Exception as e:
+    #     pytest.fail(f"Training loop failed: {e}")
 
 
 # def test_training_statistics_plot(cfg):

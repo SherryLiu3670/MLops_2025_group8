@@ -2,14 +2,9 @@ import torch
 import pytest
 from hydra import initialize, compose
 import os
+import data
 
-import importlib.util
-from tests import _SRC_ROOT, _PROJECT_ROOT
-
-# using importlib to load the data.py as module
-spec = importlib.util.spec_from_file_location("data", os.path.join(_SRC_ROOT, "data.py"))
-data = importlib.util.module_from_spec(spec)
-spec.loader.exec_module(data)
+from tests import _PROJECT_ROOT
 
 
 @pytest.fixture

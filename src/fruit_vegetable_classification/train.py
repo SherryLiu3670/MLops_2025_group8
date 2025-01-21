@@ -8,8 +8,7 @@ import torchvision.transforms as transforms
 import data
 
 
-@hydra.main(config_path="../../configs", config_name="config")
-def train(cfg, callback = None) -> None:
+def train_fn(cfg, stats_callback=None) -> None:
     """Train a model for classification task."""
     lr = cfg.experiment.lr
     batch_size = cfg.experiment.batch_size
@@ -113,8 +112,8 @@ def train(cfg, callback = None) -> None:
 
     torch.save(model.state_dict(), "last_model.pth")
 
-    if callback:
-        callback(statistics)
+    if stats_callback:
+        stats_callback(statistics)
 
     print("Training complete")
     # torch.save(model.state_dict(), "../../../models/model.pth")
@@ -128,6 +127,12 @@ def train(cfg, callback = None) -> None:
     # axs[1][1].plot(statistics["validation_accuracy"])
     # axs[1][1].set_title("Validation accuracy")
     # fig.savefig("../../../reports/figures/training_statistics.png")
+
+
+@hydra.main(config_path="../../configs", config_name="config")
+def train(cfg) -> None:
+    """Train a model for classification task."""
+    train_fn(cfg)
 
 
 if __name__ == "__main__":
