@@ -9,7 +9,7 @@ import data
 
 
 @hydra.main(config_path="../../configs", config_name="config")
-def train(cfg) -> None:
+def train(cfg, callback = None) -> None:
     """Train a model for classification task."""
     lr = cfg.experiment.lr
     batch_size = cfg.experiment.batch_size
@@ -113,18 +113,21 @@ def train(cfg) -> None:
 
     torch.save(model.state_dict(), "last_model.pth")
 
+    if callback:
+        callback(statistics)
+
     print("Training complete")
     # torch.save(model.state_dict(), "../../../models/model.pth")
-    fig, axs = plt.subplots(2, 2, figsize=(15, 5))
-    axs[0][0].plot(statistics["train_loss"])
-    axs[0][0].set_title("Train loss")
-    axs[1][0].plot(statistics["train_accuracy"])
-    axs[1][0].set_title("Train accuracy")
-    axs[0][1].plot(statistics["validation_loss"])
-    axs[0][1].set_title("Validation loss")
-    axs[1][1].plot(statistics["validation_accuracy"])
-    axs[1][1].set_title("Validation accuracy")
-    fig.savefig("../../../reports/figures/training_statistics.png")
+    # fig, axs = plt.subplots(2, 2, figsize=(15, 5))
+    # axs[0][0].plot(statistics["train_loss"])
+    # axs[0][0].set_title("Train loss")
+    # axs[1][0].plot(statistics["train_accuracy"])
+    # axs[1][0].set_title("Train accuracy")
+    # axs[0][1].plot(statistics["validation_loss"])
+    # axs[0][1].set_title("Validation loss")
+    # axs[1][1].plot(statistics["validation_accuracy"])
+    # axs[1][1].set_title("Validation accuracy")
+    # fig.savefig("../../../reports/figures/training_statistics.png")
 
 
 if __name__ == "__main__":
