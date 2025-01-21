@@ -1,0 +1,5 @@
+[core]
+    remote = fruit-and-vegetable
+['remote "fruit-and-vegetable"']
+    url = gs://mlops-fruit-and-vegetable/
+    version_aware = true
