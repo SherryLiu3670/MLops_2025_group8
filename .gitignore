@@ -192,5 +192,3 @@ outputs/
 
 # Generated reports
 reports/*
-
-.dvc/
