@@ -75,3 +75,74 @@ The directory structure of the project looks like this:
 Created using [mlops_template](https://github.com/SkafteNicki/mlops_template),
 a [cookiecutter template](https://github.com/cookiecutter/cookiecutter) for getting
 started with Machine Learning Operations (MLOps).
+
+
+## Invoke Commands
+
+This project uses [Invoke](http://www.pyinvoke.org/) for task automation. Below are the available commands and their descriptions. Please ensure to have Invoke installed before running any commands.
+
+### Prerequisites
+
+To use `invoke`, you need to have Python installed. Then, install Invoke using the following command:
+```bash
+pip install invoke
+```
+
+### Available Commands
+
+| Command                  | Description                                               |
+|--------------------------|-----------------------------------------------------------|
+| `invoke create-environment` | Creates a new conda environment for the project.          |
+| `invoke requirements`    | Installs project requirements.                            |
+| `invoke dev-requirements`| Installs development requirements.                        |
+| `invoke preprocess-data` | Preprocesses the dataset.                                 |
+| `invoke train`           | Trains the machine learning model.                       |
+| `invoke test-model`      | Tests the machine learning model.                        |
+| `invoke test`            | Runs the test suite and generates a coverage report.      |
+| `invoke docker-build`    | Builds the Docker images for training and API.            |
+| `invoke build-docs`      | Builds the project documentation.                        |
+| `invoke serve-docs`      | Serves the project documentation locally.                |
+
+### Usage
+
+Run a command using the following syntax:
+```bash
+invoke <command>
+```
+
+#### Description
+
+1. To create the conda environment:
+   ```bash
+   invoke create-environment
+   ```
+
+2. To install the project requirements:
+   ```bash
+   invoke requirements
+   ```
+
+3. To train the model:
+   ```bash
+   invoke train
+   ```
+
+4. To build Docker images:
+   ```bash
+   invoke docker-build
+   ```
+
+### Notes
+
+- Use `invoke --list` to see all available tasks:
+  ```bash
+  invoke --list
+  ```
+
+- For detailed usage of a specific command, use `invoke --help <command>`:
+  ```bash
+  invoke --help train
+  ```
+
+This section will help collaborators and users understand and efficiently use the automation tasks provided in this project.
+```
