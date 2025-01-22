@@ -3,10 +3,11 @@ import sys
 import hydra
 from hydra.utils import get_original_cwd
 import os
-import torch
-from torchvision import transforms
+import numpy as np
 from fastapi import FastAPI, File, UploadFile
 from PIL import Image
+
+import onnxruntime as ort
 
 current_module_path = os.path.abspath(__file__)
 current_module_dir = os.path.dirname(current_module_path)
@@ -16,6 +17,7 @@ def initialize_hydra():
     hydra.initialize(config_path="../../configs")
     return hydra.compose(config_name="config", overrides=["experiment=api"])
 
+sess_options = ort.SessionOptions()
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -27,23 +29,18 @@ async def lifespan(app: FastAPI):
 
     # Configure device
     device = cfg.experiment.device
-    if device != "cpu" and not torch.cuda.is_available():
-        device = "cpu"
 
     original_working_directory = os.getcwd()
     model_checkpoint = os.path.join(original_working_directory, cfg.experiment.modelpath)
+    # scrap off .pth extension and add .onnx
+    model_checkpoint = model_checkpoint[:-4] + ".onnx"
     print(f"Loading model from: {model_checkpoint}")
 
     # Add the current module directory to the Python path
     sys.path.insert(0, current_module_dir)
 
-    # Configure the model with additional attributes
-    cfg.model.model_config.input_channels = cfg.dataset.input_channels
-    model = hydra.utils.instantiate(cfg.model.model_config).to(device)
-
-    # Load model weights
-    model.load_state_dict(torch.load(model_checkpoint, map_location=device))
-    model.eval()
+    # Inferece session
+    model = ort.InferenceSession(model_checkpoint)
 
     # Load target labels
     target_labels = cfg.dataset["labels"]
@@ -71,17 +68,26 @@ async def label(data: UploadFile = File(...)):
     if i_image.mode != "RGB":
         i_image = i_image.convert(mode="RGB")
 
-    # Convert the image to a tensor
-    image_tensor = transforms.ToTensor()(i_image).unsqueeze(0)
-
+    # Convert the PIL image to a numpy array
+    image = np.array(i_image)
+    
     # Resize the image if desired input resolution is provided
     if "desired_input_resolution" in cfg.model:
-        image_tensor = transforms.Resize(cfg.model.desired_input_resolution)(image_tensor)
-    image_tensor = image_tensor.to(device)
+        image = Image.fromarray(image).resize(cfg.model.desired_input_resolution)
+        image = np.array(image)
+
+    # Prepare the input data
+    image = image.transpose(2, 0, 1).astype(np.float32) / 255.0
+    # append additional dimension to the image
+    image = image[None, ...]
+    input_data = {"input.1": image}
+    
 
     # Predict with the model
-    y_pred = model(image_tensor)
+    y_pred = model.run(None, input_data)[0]
 
     # Map prediction to the target labels
-    pred = target_labels[y_pred.argmax(dim=1).item()]
+    # get argument of max value from the prediction
+    pred = target_labels[int(np.argmax(y_pred))]
+
     return {"prediction": pred}

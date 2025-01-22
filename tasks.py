@@ -88,7 +88,7 @@ def docker_build_frontend(ctx: Context, progress: str = "plain") -> None:
 @task
 def docker_run_frontend(ctx: Context) -> None:
     """Run Frontend docker container."""
-    ctx.run("docker run -p 8080:8080 -e PORT=8080 frontend:latest", echo=True, pty=not WINDOWS)
+    ctx.run("docker run -p 8001:8001 -e PORT=8001 frontend:latest", echo=True, pty=not WINDOWS)
 
 @task
 def docker_run_api(ctx: Context) -> None:
