@@ -5,7 +5,7 @@ steps:
     'build',
     '.',
     '-t',
-    'europe-west1-docker.pkg.dev/dtumlops-447920/mlops-fruit-and-vegetables/fruit-and-vegetables-image',
+    'europe-west1-docker.pkg.dev/dtumlops-447920/mlops-fruit-and-vegetables/train-image',
     '-f',
     'dockerfiles/train.dockerfile'
   ]
@@ -13,7 +13,39 @@ steps:
   id: 'Push container image'
   args: [
     'push',
-    'europe-west1-docker.pkg.dev/dtumlops-447920/mlops-fruit-and-vegetables/fruit-and-vegetables-image'
+    'europe-west1-docker.pkg.dev/dtumlops-447920/mlops-fruit-and-vegetables/train-image'
+  ]
+- name: 'gcr.io/cloud-builders/docker'
+  id: 'Build container image'
+  args: [
+    'build',
+    '.',
+    '-t',
+    'europe-west1-docker.pkg.dev/dtumlops-447920/mlops-fruit-and-vegetables/api-image',
+    '-f',
+    'dockerfiles/api.dockerfile'
+  ]
+- name: 'gcr.io/cloud-builders/docker'
+  id: 'Push container image'
+  args: [
+    'push',
+    'europe-west1-docker.pkg.dev/dtumlops-447920/mlops-fruit-and-vegetables/api-image'
+  ]
+- name: 'gcr.io/cloud-builders/docker'
+  id: 'Build container image'
+  args: [
+    'build',
+    '.',
+    '-t',
+    'europe-west1-docker.pkg.dev/dtumlops-447920/mlops-fruit-and-vegetables/frontend-image',
+    '-f',
+    'dockerfiles/frontend.dockerfile'
+  ]
+- name: 'gcr.io/cloud-builders/docker'
+  id: 'Push container image'
+  args: [
+    'push',
+    'europe-west1-docker.pkg.dev/dtumlops-447920/mlops-fruit-and-vegetables/frontend-image'
   ]
 options:
   logging: CLOUD_LOGGING_ONLY
