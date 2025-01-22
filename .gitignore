@@ -184,9 +184,6 @@ data/raw/
 # Preprocessed data
 data/processed
 
-# Model checkpoints
-models/*
-
 # Hydra outputs
 outputs/
 
