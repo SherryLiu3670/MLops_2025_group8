@@ -54,23 +54,52 @@ def test(ctx: Context) -> None:
 @task
 def docker_build(ctx: Context, progress: str = "plain") -> None:
     """Build docker images."""
+    docker_build_train(ctx, progress)
+    docker_build_api(ctx, progress)
+    docker_build_frontend(ctx, progress)
+
+@task
+def docker_build_train(ctx: Context, progress: str = "plain") -> None:
+    """Build Train docker image."""
     ctx.run(
         f"docker build -t train:latest . -f dockerfiles/train.dockerfile --progress={progress}",
         echo=True,
         pty=not WINDOWS
     )
+
+@task
+def docker_build_api(ctx: Context, progress: str = "plain") -> None:
+    """Build API docker image."""
     ctx.run(
         f"docker build -t api:latest . -f dockerfiles/api.dockerfile --progress={progress}",
         echo=True,
         pty=not WINDOWS
     )
 
+@task
+def docker_build_frontend(ctx: Context, progress: str = "plain") -> None:
+    """Build Frontend docker image."""
+    ctx.run(
+        f"docker build -t frontend:latest . -f dockerfiles/frontend.dockerfile --progress={progress}",
+        echo=True,
+        pty=not WINDOWS
+    )
+
+@task
+def docker_run_frontend(ctx: Context) -> None:
+    """Run Frontend docker container."""
+    ctx.run("docker run -p 8080:8080 -e PORT=8080 frontend:latest", echo=True, pty=not WINDOWS)
+
+@task
+def docker_run_api(ctx: Context) -> None:
+    """Run API docker container."""
+    ctx.run("docker run -p 8000:8000 api:latest", echo=True, pty=not WINDOWS)
+
 # Documentation commands
 @task(dev_requirements)
 def build_docs(ctx: Context) -> None:
     """Build documentation."""
     ctx.run("mkdocs build --config-file docs/mkdocs.yaml --site-dir build", echo=True, pty=not WINDOWS)
-
 
 @task(dev_requirements)
 def serve_docs(ctx: Context) -> None:
