@@ -15,6 +15,19 @@ steps:
     'push',
     'europe-west1-docker.pkg.dev/dtumlops-447920/mlops-fruit-and-vegetables/train-image'
   ]
+# - name: 'gcr.io/cloud-builders/gcloud'
+#   id: 'Deploy to Cloud Run for training'
+#   args: [
+#     'run',
+#     'deploy',
+#     'fruit-and-vegetable-train',
+#     '--image',
+#     'europe-west1-docker.pkg.dev/dtumlops-447920/mlops-fruit-and-vegetables/train-image',
+#     '--region',
+#     'europe-west1',
+#     '--platform',
+#     'managed',
+#   ]
 
 - name: 'gcr.io/cloud-builders/docker'
   id: 'Build container image for api'
@@ -31,6 +44,19 @@ steps:
   args: [
     'push',
     'europe-west1-docker.pkg.dev/dtumlops-447920/mlops-fruit-and-vegetables/api-image'
+  ]
+- name: 'gcr.io/cloud-builders/gcloud'
+  id: 'Deploy to Cloud Run for api'
+  args: [
+    'run',
+    'deploy',
+    'fruit-and-vegetable-api',
+    '--image',
+    'europe-west1-docker.pkg.dev/dtumlops-447920/mlops-fruit-and-vegetables/api-image',
+    '--region',
+    'europe-west1',
+    '--platform',
+    'managed',
   ]
 
 - name: 'gcr.io/cloud-builders/docker'
@@ -49,7 +75,19 @@ steps:
     'push',
     'europe-west1-docker.pkg.dev/dtumlops-447920/mlops-fruit-and-vegetables/frontend-image'
   ]
-
+# - name: 'gcr.io/cloud-builders/gcloud'
+#   id: 'Deploy to Cloud Run for frontend'
+#   args: [
+#     'run',
+#     'deploy',
+#     'fruit-and-vegetable-frontend',
+#     '--image',
+#     'europe-west1-docker.pkg.dev/dtumlops-447920/mlops-fruit-and-vegetables/frontend-image',
+#     '--region',
+#     'europe-west1',
+#     '--platform',
+#     'managed',
+#   ]
 options:
   logging: CLOUD_LOGGING_ONLY
   env:
