@@ -8,8 +8,6 @@ import numpy as np
 from fastapi import FastAPI, File, UploadFile
 from PIL import Image
 
-import pdb
-
 import onnxruntime as ort
 
 current_module_path = os.path.abspath(__file__)

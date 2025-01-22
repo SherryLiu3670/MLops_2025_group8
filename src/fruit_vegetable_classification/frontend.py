@@ -9,8 +9,6 @@ from streamlit_webrtc import webrtc_streamer, VideoHTMLAttributes
 import numpy as np
 import av
 
-import pdb
-
 # Set backend API URL
 API_URL = "http://localhost:8000/label/"
 

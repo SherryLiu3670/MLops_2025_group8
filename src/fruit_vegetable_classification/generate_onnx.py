@@ -2,8 +2,6 @@ import hydra
 import torch
 import os
 
-import pdb
-
 def main(cfg):
     """Convert a PyTorch model to ONNX format."""
 
