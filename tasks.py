@@ -93,7 +93,7 @@ def docker_run_frontend(ctx: Context) -> None:
 @task
 def docker_run_api(ctx: Context) -> None:
     """Run API docker container."""
-    ctx.run("docker run -p 8000:8000 api:latest", echo=True, pty=not WINDOWS)
+    ctx.run("docker run -p 8000:8000 -e PORT=8000 api:latest", echo=True, pty=not WINDOWS)
 
 # Documentation commands
 @task(dev_requirements)
