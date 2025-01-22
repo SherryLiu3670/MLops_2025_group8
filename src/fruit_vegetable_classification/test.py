@@ -8,17 +8,30 @@ from hydra.utils import get_original_cwd
 from torch.utils.data import DataLoader
 
 import data
+import wandb
 
 
 @hydra.main(config_path="../../configs", config_name="config")
+
+
 def test(cfg) -> None:
     """Test a model on a dataset."""
     device = cfg.experiment.device
     batch_size = cfg.experiment.batch_size
 
     print("Testing the model")
-    original_working_directory = get_original_cwd()
-    model_checkpoint = os.path.join(original_working_directory, cfg.experiment.modelpath)
+
+    run = wandb.init(project="fruit_vegetable_classification", job_type="test")
+
+    # Use the artifact from W&B
+    artifact = run.use_artifact('dtu_mlops_group8/fruit_vegetable_classification/full_best_model:v5', type='model')
+    artifact_dir = artifact.download("./models")  
+
+    # Load the model
+    model_checkpoint = os.path.join(artifact_dir, "best_model.pth")
+
+    #original_working_directory = get_original_cwd()
+    #model_checkpoint = os.path.join(original_working_directory, cfg.experiment.modelpath)
     cfg.model.model_config.input_channels = cfg.dataset.input_channels
     model = hydra.utils.instantiate(cfg.model.model_config).to(device)
     model.load_state_dict(torch.load(model_checkpoint, map_location=device))
