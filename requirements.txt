@@ -11,3 +11,4 @@ loguru==0.7.3
 torch-tb-profiler==0.4.3
 wandb==0.19.2
 omegaconf==2.3.0
+scikit-learn==1.6.1
