@@ -189,3 +189,6 @@ outputs/
 
 # Generated reports
 reports/*
+
+# ignore wandb directory
+wandb/
