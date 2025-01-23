@@ -614,4 +614,5 @@ For load testing, we tested the POST /label/ endpoint with 100 concurrent users 
 > Answer:
 
 Hui Wang s210331 implementing the model development, integrated wandb into the workflow and load testing of our API.
-Xiao Xiao s232189 implementing the dataload, and unit test of dataload, integrated wandb for hyperparameter optimization sweep. Calculate the code coverage
+Xiao Xiao s232189 implementing the dataload, and unit test of dataload, integrated wandb for hyperparameter optimization sweep. Calculate the code coverage.
+Yufan Wang s232213 updated the `README.md` with detailed descriptions of all `invoke` commands，write unit tests related to model construction.
