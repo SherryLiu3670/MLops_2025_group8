@@ -17,10 +17,10 @@ def cfg():
 def test_device_selection(cfg):
     """Test that the device falls back to CPU if CUDA is unavailable."""
     # with initialize(config_path="../../configs"):
-    cfg.experiment.device = "cuda" if torch.cuda.is_available() else "cpu"
+    cfg.hyperparams.device = "cuda" if torch.cuda.is_available() else "cpu"
     
     if not torch.cuda.is_available():
-        assert cfg.experiment.device != "cuda", "Device should fall back to CPU when CUDA is unavailable."
+        assert cfg.hyperparams.device != "cuda", "Device should fall back to CPU when CUDA is unavailable."
 
 
 def test_model_initialization(cfg):
@@ -28,10 +28,10 @@ def test_model_initialization(cfg):
     # with initialize(config_path="../../configs"):
         # cfg = compose(config_name="config")
     model = torch.nn.Module()
-    cfg.experiment.device = "cuda" if torch.cuda.is_available() else "cpu"
+    cfg.hyperparams.device = "cuda" if torch.cuda.is_available() else "cpu"
     try:
         cfg.model.model_config.input_channels = cfg.dataset.input_channels
-        model = hydra.utils.instantiate(cfg.model.model_config).to(cfg.experiment.device)
+        model = hydra.utils.instantiate(cfg.model.model_config).to(cfg.hyperparams.device)
         assert model is not None, "Model should be initialized successfully."
     except Exception as e:
         pytest.fail(f"Model initialization failed: {e}")
@@ -42,7 +42,7 @@ def test_training_loop(cfg):
     """Test one epoch of training and validation."""
     # with initialize(config_path="../../configs"):
     #     cfg = compose(config_name="config")
-    cfg.experiment.epochs = 1  # Run for only one epoch for testing purposes
+    cfg.hyperparams.epochs = 1  # Run for only one epoch for testing purposes
     captured_statistics = None
     def my_callback(statistics):
         nonlocal captured_statistics
@@ -68,7 +68,7 @@ def test_training_loop(cfg):
 #     """Test that the training statistics plot is generated."""
 #     # with initialize(config_path="../../configs"):
 #     #     cfg = compose(config_name="config")
-#     cfg.experiment.epochs = 1  # Run for only one epoch for testing purposes
+#     cfg.hyperparams.epochs = 1  # Run for only one epoch for testing purposes
 
 #     try:
 #         train.train(cfg)
