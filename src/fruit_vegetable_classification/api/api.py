@@ -16,7 +16,7 @@ current_module_dir = os.path.dirname(current_module_path)
 # Define a function to initialize Hydra configuration
 def initialize_hydra():
     hydra.initialize(config_path="../../configs")
-    return hydra.compose(config_name="config", overrides=["experiment=api"])
+    return hydra.compose(config_name="config", overrides=["checkpoint=resnet18"])
 
 sess_options = ort.SessionOptions()
 
@@ -29,10 +29,10 @@ async def lifespan(app: FastAPI):
     cfg = initialize_hydra()
 
     # Configure device
-    device = cfg.experiment.device
+    device = cfg.hyperparams.device
 
     original_working_directory = os.getcwd()
-    model_checkpoint = os.path.join(original_working_directory, cfg.experiment.modelpath)
+    model_checkpoint = os.path.join(original_working_directory, cfg.checkpoint.modelpath)
     # scrap off .pth extension and add .onnx
     model_checkpoint = model_checkpoint[:-4] + ".onnx"
     print(f"Loading model from: {model_checkpoint}")

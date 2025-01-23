@@ -1,6 +1,6 @@
 model_config:
   _target_: model.MobileNetModel
+  input_channels: 1
+  num_classes: 10          
   model_type: "mobilenetV3S"  # Options: 'mobilenetV2', 'mobilenetV3L', 'mobilenetV3S'
-  input_channels: 3
-  num_classes: 36          
   pretrained: true         

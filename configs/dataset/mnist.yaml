@@ -7,6 +7,7 @@ test_class: MNISTTestDataset
 data_dir: data/raw/mnist
 input_resolution: [28, 28]
 input_channels: 1
+num_classes: 10
 process_config:
   output_folder: data/processed/mnist
   train_images_file: train_images.pt

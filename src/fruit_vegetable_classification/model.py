@@ -67,12 +67,14 @@ class ResNetModel(nn.Module):
         """Initialize the ResNet model with given parameters."""
         super(ResNetModel, self).__init__()
 
+        weights_opt = 'DEFAULT' if pretrained else None
+
         if model_type == "resnet18":
-            self.resnet = models.resnet18(pretrained=pretrained)
+            self.resnet = models.resnet18(weights=weights_opt)
         elif model_type == "resnet34":
-            self.resnet = models.resnet34(pretrained=pretrained)
+            self.resnet = models.resnet34(weights=weights_opt)
         elif model_type == "resnet50":
-            self.resnet = models.resnet50(pretrained=pretrained)
+            self.resnet = models.resnet50(weights=weights_opt)
         else:
             raise ValueError(f"Invalid model_type: {model_type}. Choose from 'resnet18', 'resnet34', 'resnet50'.")
 
@@ -91,14 +93,16 @@ class MobileNetModel(nn.Module):
         """Initialize the MobileNet model with given parameters."""
         super(MobileNetModel, self).__init__()
 
+        weights_opt = 'DEFAULT' if pretrained else None
+
         if model_type == "mobilenetV2":
-            self.mobilenet = models.mobilenet_v2(pretrained=pretrained)
+            self.mobilenet = models.mobilenet_v2(weights=weights_opt)
             first_layer = self.mobilenet.features[0]
         elif model_type == "mobilenetV3L":
-            self.mobilenet = models.mobilenet_v3_large(pretrained=pretrained)
+            self.mobilenet = models.mobilenet_v3_large(weights=weights_opt)
             first_layer = self.mobilenet.features[0][0]
         elif model_type == "mobilenetV3S":
-            self.mobilenet = models.mobilenet_v3_small(pretrained=pretrained)
+            self.mobilenet = models.mobilenet_v3_small(weights=weights_opt)
             first_layer = self.mobilenet.features[0][0]
         else:
             raise ValueError(

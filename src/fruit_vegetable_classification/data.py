@@ -14,6 +14,7 @@ import yaml
 from PIL import Image
 from torch.utils.data import Dataset
 
+import pdb
 
 def normalize(images: torch.Tensor) -> torch.Tensor:
     """Normalize images."""
@@ -38,8 +39,8 @@ class MNISTTrainDataset(Dataset):
         if not os.path.exists(train_images_path) or not os.path.exists(train_target_path):
             raise FileNotFoundError("Preprocessing step should be executed first")
 
-        train_images = torch.load(train_images_path)
-        train_target = torch.load(train_target_path)
+        train_images = torch.load(train_images_path, weights_only=False)
+        train_target = torch.load(train_target_path, weights_only=False)
 
         self.train_images = train_images
         self.train_target = train_target
@@ -72,8 +73,8 @@ class MNISTTestDataset(Dataset):
         if not os.path.exists(test_images_path) or not os.path.exists(test_target_path):
             raise FileNotFoundError("Preprocessing step should be executed first")
 
-        test_images = torch.load(test_images_path)
-        test_target = torch.load(test_target_path)
+        test_images = torch.load(test_images_path, weights_only=False)
+        test_target = torch.load(test_target_path, weights_only=False)
 
         self.test_images = test_images
         self.test_target = test_target
@@ -165,11 +166,16 @@ class FruitVegetableTestDataset(Dataset):
         if not os.path.exists(test_images_path) or not os.path.exists(test_target_path):
             raise FileNotFoundError("Preprocessing step should be executed first")
 
-        test_images = torch.load(test_images_path)
-        test_target = torch.load(test_target_path)
+        test_images = torch.load(test_images_path, weights_only=False)
+        test_target = torch.load(test_target_path, weights_only=False)
 
         self.test_images = test_images
         self.test_target = test_target
+
+        # transform with desired resolution if provided
+        self.transform = None
+        if preprocessed_dict["desired_resolution"]:
+            self.transform = T.Compose([T.Resize((preprocessed_dict["desired_resolution"]))])  # Resize to datasets' native resolution
 
     def __len__(self) -> int:
         """Return the length of the testing dataset."""
@@ -177,7 +183,13 @@ class FruitVegetableTestDataset(Dataset):
 
     def __getitem__(self, index: int):
         """Return a given sample from the testing dataset."""
-        return self.test_images[index], self.test_target[index]
+        
+        sample = self.test_images[index]
+
+        if self.transform:
+            sample = self.transform(sample)
+
+        return sample, self.test_target[index]
 
 
 class FruitVegetableValDataset(Dataset):
@@ -196,11 +208,16 @@ class FruitVegetableValDataset(Dataset):
         if not os.path.exists(val_images_path) or not os.path.exists(val_target_path):
             raise FileNotFoundError("Preprocessing step should be executed first")
 
-        val_images = torch.load(val_images_path)
-        val_targets = torch.load(val_target_path)
+        val_images = torch.load(val_images_path, weights_only=False)
+        val_targets = torch.load(val_target_path, weights_only=False)
 
         self.val_images = val_images
-        self.val_targets = val_targets
+        self.val_target = val_targets
+
+        # transform with desired resolution if provided
+        self.transform = None
+        if preprocessed_dict["desired_resolution"]:
+            self.transform = T.Compose([T.Resize((preprocessed_dict["desired_resolution"]))])  # Resize to datasets' native resolution
 
     def __len__(self) -> int:
         """Return the length of the validation dataset."""
@@ -208,7 +225,13 @@ class FruitVegetableValDataset(Dataset):
 
     def __getitem__(self, index: int):
         """Return a given sample from the validation dataset."""
-        return self.val_images[index], self.val_targets[index]
+        
+        sample = self.val_images[index]
+
+        if self.transform:
+            sample = self.transform(sample)
+
+        return sample, self.val_target[index]
 
 
 class FruitVegetableTrainDataset(Dataset):
@@ -227,11 +250,16 @@ class FruitVegetableTrainDataset(Dataset):
         if not os.path.exists(train_images_path) or not os.path.exists(train_target_path):
             raise FileNotFoundError("Preprocessing step should be executed first")
 
-        train_images = torch.load(train_images_path)
-        train_target = torch.load(train_target_path)
+        train_images = torch.load(train_images_path, weights_only=False)
+        train_target = torch.load(train_target_path, weights_only=False)
 
         self.train_images = train_images
         self.train_target = train_target
+
+        # transform with desired resolution if provided
+        self.transform = None
+        if preprocessed_dict["desired_resolution"]:
+            self.transform = T.Compose([T.Resize((preprocessed_dict["desired_resolution"]))])  # Resize to datasets' native resolution
 
     def __len__(self) -> int:
         """Return the length of the training dataset."""
@@ -239,7 +267,13 @@ class FruitVegetableTrainDataset(Dataset):
 
     def __getitem__(self, index: int):
         """Return a given sample from the training dataset."""
-        return self.train_images[index], self.train_target[index]
+        
+        sample = self.train_images[index]
+
+        if self.transform:
+            sample = self.transform(sample)
+
+        return sample, self.train_target[index]
 
 
 class FruitVegetableDataset:
@@ -280,6 +314,7 @@ class FruitVegetableDataset:
             data_config = {"labels": folder_names}
         else:
             data_config = {"labels": folder_names[:2]}
+        data_config["num_classes"] = len(data_config["labels"])
 
         # Path to the YAML file
         yaml_file_path = "configs/dataset/fruit_vegetable.yaml"
@@ -292,10 +327,11 @@ class FruitVegetableDataset:
         if fruit_vegetable_config is None:
             fruit_vegetable_config = {}
 
-        # Remove the "labels" key if it exists
+        # Remove the "labels" and "num_classes" keys if exist
         fruit_vegetable_config.pop("labels", None)
+        fruit_vegetable_config.pop("num_classes", None)
 
-        # Append with the new labels
+        # Append with the updated keys
         fruit_vegetable_config.update(data_config)
 
         # Write the updated content back to the YAML file
@@ -386,7 +422,7 @@ class FruitVegetableDataset:
         torch.save(test_targets, os.path.join(output_folder, test_target_file))
 
 
-@hydra.main(version_base=None, config_path="../../configs", config_name="config")
+@hydra.main(version_base="1.3", config_path="../../configs", config_name="config")
 def preprocess(cfg) -> None:
     """Preprocess the data."""
     print("Preprocessing data...")
