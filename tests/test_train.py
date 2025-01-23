@@ -41,8 +41,10 @@ def test_model_initialization(cfg):
 @patch("wandb.init", MagicMock())
 @patch("wandb.log_artifact", MagicMock())
 @patch("wandb.log", MagicMock())
+@patch("wandb.Artifact.add_file", MagicMock())
 @patch("torch.save", MagicMock())
 @patch("matplotlib.pyplot.subplots", MagicMock(return_value=(MagicMock(), MagicMock())))
+@patch("hydra.core.hydra_config.HydraConfig.get", MagicMock())
 def test_training_loop(cfg):
     """Test one epoch of training and validation."""
     # with initialize(config_path="../../configs"):

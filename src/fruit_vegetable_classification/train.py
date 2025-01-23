@@ -9,13 +9,19 @@ from loguru import logger
 import wandb
 from sklearn.metrics import precision_score, recall_score, f1_score
 
+from hydra.core.hydra_config import HydraConfig
 import omegaconf
+
+import os
 
 def train_fn(cfg, stats_callback=None) -> None:
     """Train a model for classification task."""
     lr = cfg.hyperparams.lr
     batch_size = cfg.hyperparams.batch_size
     epochs = cfg.hyperparams.epochs
+
+    # Get the logging directory
+    logging_dir = HydraConfig.get().runtime.output_dir
 
     device = cfg.hyperparams.device
     # check if the device in configuration is supported otherwise fallback to cpu
@@ -145,11 +151,11 @@ def train_fn(cfg, stats_callback=None) -> None:
         if epoch_loss < best_validation_loss:
             best_epoch = epoch
             best_validation_loss = epoch_loss
-            torch.save(model.state_dict(), "best_model.pth")
+            torch.save(model.state_dict(), os.path.join(logging_dir, "best_model.pth"))
             logger.info(f"New best model saved with validation loss: {best_validation_loss:.4f}")
 
     # Save the last model        
-    torch.save(model.state_dict(), "last_model.pth")
+    torch.save(model.state_dict(), os.path.join(logging_dir, "last_model.pth"))
     
     # Log the best model to wandb
     best_model_artifact = wandb.Artifact(name=f"{model_name}_best", type="model",
@@ -188,7 +194,7 @@ def train_fn(cfg, stats_callback=None) -> None:
     axs[0].set_title("Train loss")
     axs[1].plot(statistics["train_accuracy"])
     axs[1].set_title("Train accuracy")
-    fig.savefig("training_statistics.png")
+    fig.savefig(os.path.join(logging_dir, "training_statistics.png"))
     
     fig_val, axs_val = plt.subplots(2, 3, figsize=(15, 10))
     axs_val[0, 0].plot(statistics["validation_loss"])
@@ -202,7 +208,7 @@ def train_fn(cfg, stats_callback=None) -> None:
     axs_val[1, 1].plot(statistics["validation_f1"])
     axs_val[1, 1].set_title("Validation F1-Score")
     axs_val[1, 2].axis("off") 
-    fig_val.savefig("validation_statistics.png")
+    fig_val.savefig(os.path.join(logging_dir, "validation_statistics.png"))
 
 @hydra.main(version_base="1.3", config_path="../../configs", config_name="config")
 def train(cfg) -> None:
