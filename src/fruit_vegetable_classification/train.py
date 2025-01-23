@@ -26,7 +26,7 @@ def train_fn(cfg, stats_callback=None) -> None:
     model_name = f"{cfg.model.model_config.model_type}_lr{lr}_batch{batch_size}_epochs{epochs}"
 
     # Initialize wandb
-    wandbcfg = wandb.config = omegaconf.OmegaConf.to_container(cfg, resolve=True, throw_on_missing=True)
+    wandbcfg = omegaconf.OmegaConf.to_container(cfg, resolve=True, throw_on_missing=True)
 
     wandb.init(
         project="fruit_vegetable_classification",

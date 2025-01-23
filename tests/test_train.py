@@ -1,9 +1,10 @@
 import pytest
 import torch
 import hydra
-import train
 import os
 from hydra import compose, initialize
+
+from unittest.mock import MagicMock, patch
 
 @pytest.fixture
 def cfg():
@@ -36,8 +37,9 @@ def test_model_initialization(cfg):
     except Exception as e:
         pytest.fail(f"Model initialization failed: {e}")
 
-
-
+@patch("wandb.init", MagicMock())
+@patch("wandb.log_artifact", MagicMock())
+@patch("wandb.log", MagicMock())
 def test_training_loop(cfg):
     """Test one epoch of training and validation."""
     # with initialize(config_path="../../configs"):
@@ -47,7 +49,8 @@ def test_training_loop(cfg):
     def my_callback(statistics):
         nonlocal captured_statistics
         captured_statistics = statistics
-        
+    
+    import train
     train.train_fn(cfg, stats_callback=my_callback)
     # Ensure captured_statistics is valid
     assert isinstance(captured_statistics, dict), "Captured statistics must be a dictionary."
