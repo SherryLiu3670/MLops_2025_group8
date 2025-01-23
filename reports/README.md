@@ -252,7 +252,7 @@ From the Cookiecutter template, we filled the src/ folder with the core function
 >
 > Answer:
 
-Yes, our workflow included using branches and pull requests. Each team member created a separate branch based on the specific task they were responsible for, such as dataloader branch, logging branch etc. Once a task was completed, a pull request was created to merge the branch into the main branch. To ensure code quality and maintain consistency, each pull request required at least one team member’s approval before being merged into the main branch. This process helped us avoid conflicts, ensure peer review, and maintain a clean and stable main branch. During the review process, if any issues or concerns were identified, we held discussions as a team to address them effectively. Additionally, we created issues in the repository to document encountered problems or topics that required further discussion.
+Yes, our workflow included using branches and pull requests. Each team member created a separate branch based on the specific task they were responsible for, such as dataloader branch, logging branch etc. Once a task was completed, a pull request was created to merge the branch into the main branch. To ensure code quality and maintain consistency, each pull request required at least one team member’s approval before being merged into the main branch. This process helped us avoid conflicts, ensure peer review, and maintain a clean and stable main branch. During the review process, if any issues or concerns were identified, we held discussions as a team to address them effectively. Additionally, we created issues in the repository to document encountered problems or topics that required further discussion. To merge code we used software sourcetree for PRs request.
 
 ### Question 10
 
@@ -357,6 +357,11 @@ Monitoring validation loss is essential for assessing the model's ability to gen
 
 For classification tasks, a confusion matrix is a fundamental tool to assess model performance. It provides a detailed breakdown of the model's predictions by showing the number of true positives, true negatives, false positives, and false negatives for each class. So we decide also monitor the confusion matrix. Besides, from the confusion matrix can also guide us adjustment model, such as tuning hyperparameters, modifying the loss function, or augmenting specific classes to improve performance. 
 
+For hyperparameter sweeps tasks, all the parermeters of input data had been successfully run in Wandb, but bugging in output like validation_loss which cannot make the experiment further, as seen in the figure <img width="1045" alt="image" src="https://github.com/user-attachments/assets/96da953a-71f6-4289-9e51-39b719075740" />.
+
+
+
+
 ### Question 15
 
 > **Docker is an important tool for creating containerized applications. Explain how you used docker in your**
@@ -387,7 +392,7 @@ For classification tasks, a confusion matrix is a fundamental tool to assess mod
 
 When encountering bugs during our experiments, we approached debugging in different ways depending on individual preferences within the group. Some team members primarily used print statements or logging to track the flow of the code and identify where unexpected behavior occurred. Others relied on debugging tools in IDEs like VSCode. 
 
-Yes We did a single profiling run of our train code at begining, the result showed the dataloader coster longer time than we expected, after analyzing the issue, we identified that certain preprocessing steps, such as normalization, were being applied dynamically within the dataloader during training. To address this, we moved the preprocessing step outside the training loop and applied it to the dataset beforehand. This allowed us to store the preprocessed data for faster access during training, significantly reducing the dataloader's runtime.
+Yes We did a single profiling run of our train code at begining, the result showed the dataloader costs longer time than we expected, after analyzing the issue, we identified that certain preprocessing steps, such as normalization, were being applied dynamically within the dataloader during training. To address this, we moved the preprocessing step outside the training loop and applied it to the dataset beforehand. This allowed us to store the preprocessed data for faster access during training, significantly reducing the dataloader's runtime.
 
 ## Working in the cloud
 
@@ -609,3 +614,4 @@ For load testing, we tested the POST /label/ endpoint with 100 concurrent users 
 > Answer:
 
 Hui Wang s210331 implementing the model development, integrated wandb into the workflow and load testing of our API.
+Xiao Xiao s232189 implementing the dataload, and unit test of dataload, integrated wandb for hyperparameter optimization sweep. Calculate the code coverage
