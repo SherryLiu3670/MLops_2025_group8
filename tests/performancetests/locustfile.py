@@ -3,7 +3,7 @@ import os
 
 class LoadTestAPI(HttpUser):
     wait_time = between(1, 5)
-    host ="http://127.0.0.1:8000/"  
+    host ="https://fruit-and-vegetable-api-34394117935.europe-west1.run.app/"  
 
 
     @task
