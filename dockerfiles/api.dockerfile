@@ -15,6 +15,7 @@ COPY pyproject.toml pyproject.toml
 RUN --mount=type=cache,target=/root/.cache/pip pip install -r requirements_api.txt --verbose
 RUN --mount=type=cache,target=/root/.cache/pip pip install . --no-deps --verbose
 
-EXPOSE $PORT
-ENTRYPOINT ["sh", "-c", "uvicorn src.fruit_vegetable_classification.api:app --port=$PORT"]
+EXPOSE 8080
+
+ENTRYPOINT ["uvicorn", "src.fruit_vegetable_classification.api:app", "--host", "0.0.0.0", "--port", "8080", "--workers", "0"]
 # uvicorn src.fruit_vegetable_classification.api:app --host 0.0.0.0 --port 8000
