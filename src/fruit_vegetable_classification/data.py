@@ -112,13 +112,13 @@ class MNISTDataset:
         train_target_list: List[torch.Tensor] = []
 
         for i in range(6):
-            train_images_list.append(torch.load(f"{self.data_path}/train_images_{i}.pt"))
-            train_target_list.append(torch.load(f"{self.data_path}/train_target_{i}.pt"))
+            train_images_list.append(torch.load(f"{self.data_path}/train_images_{i}.pt", weights_only=False))
+            train_target_list.append(torch.load(f"{self.data_path}/train_target_{i}.pt", weights_only=False))
         train_images: torch.Tensor = torch.cat(train_images_list)
         train_target: torch.Tensor = torch.cat(train_target_list)
 
-        test_images = torch.load(f"{self.data_path}/test_images.pt")
-        test_target = torch.load(f"{self.data_path}/test_target.pt")
+        test_images = torch.load(f"{self.data_path}/test_images.pt", weights_only=False)
+        test_target = torch.load(f"{self.data_path}/test_target.pt", weights_only=False)
 
         train_images = train_images.unsqueeze(1).float()
         test_images = test_images.unsqueeze(1).float()
