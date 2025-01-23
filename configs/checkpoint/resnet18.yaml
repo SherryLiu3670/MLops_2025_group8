@@ -1,1 +1,2 @@
-modelpath: models/fruit_vegetable_partial_resnet.pth
+modelpath: dtu_mlops_group8/fruit_vegetable_classification/resnet18_lr0.001_batch32_epochs10_best:latest
+name: best_model.pth
