@@ -3,11 +3,46 @@ input_channels: 3
 labels:
 - apple
 - banana
+- beetroot
+- bell pepper
+- cabbage
+- capsicum
+- carrot
+- cauliflower
+- chilli pepper
+- corn
+- cucumber
+- eggplant
+- garlic
+- ginger
+- grapes
+- jalepeno
+- kiwi
+- lemon
+- lettuce
+- mango
+- onion
+- orange
+- paprika
+- pear
+- peas
+- pineapple
+- pomegranate
+- potato
+- raddish
+- soy beans
+- spinach
+- sweetcorn
+- sweetpotato
+- tomato
+- turnip
+- watermelon
 name: FruitVegetable
+num_classes: 36
 preprocess_class: FruitVegetableDataset
 process_config:
   output_folder: data/processed/fruit_vegetable
-  partial: true
+  partial: false
   test_images_file: test_images.pt
   test_target_file: test_target.pt
   train_images_file: train_images.pt
