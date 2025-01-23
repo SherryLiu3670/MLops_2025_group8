@@ -1,16 +1,16 @@
 from locust import HttpUser, task, between
 import os
 
-class LoadTestAPI(HttpUser):
-    wait_time = between(1, 5)
-    host ="https://fruit-and-vegetable-api-34394117935.europe-west1.run.app/"  
+# specify the path to the test image
+test_image_path = "data/raw/fruit_vegetable/test/apple/Image_1.jpg"
 
+class LoadTestAPI(HttpUser):
+    '''Load test the API'''
+    wait_time = between(1, 5)
 
     @task
     def test_label_endpoint(self):
-        # Path to a test image
-        test_image_path = r"data\raw\fruit_vegetable\test\apple\Image_1.jpg"  # Replace with a valid image file path
-        
+                
         # Ensure the test image exists
         if not os.path.exists(test_image_path):
             print(f"Test image not found: {test_image_path}")

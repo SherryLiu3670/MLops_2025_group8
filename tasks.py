@@ -95,6 +95,11 @@ def docker_run_api(ctx: Context) -> None:
     """Run API docker container."""
     ctx.run("docker run -p 8000:8000 -e PORT=8000 api:latest", echo=True, pty=not WINDOWS)
 
+@task
+def test_performance(ctx: Context) -> None:
+    """Test API performance."""
+    ctx.run("locust -f tests/performance/locustfile.py --host https://fruit-and-vegetable-api-34394117935.europe-west1.run.app/ --headless -u 50 -t 60s", echo=True, pty=not WINDOWS)
+
 # Documentation commands
 @task(dev_requirements)
 def build_docs(ctx: Context) -> None:
