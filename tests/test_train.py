@@ -3,6 +3,7 @@ import torch
 import hydra
 import os
 from hydra import compose, initialize
+import matplotlib
 
 from unittest.mock import MagicMock, patch
 
@@ -40,6 +41,8 @@ def test_model_initialization(cfg):
 @patch("wandb.init", MagicMock())
 @patch("wandb.log_artifact", MagicMock())
 @patch("wandb.log", MagicMock())
+@patch("torch.save", MagicMock())
+@patch("matplotlib.pyplot.subplots", MagicMock(return_value=(MagicMock(), MagicMock())))
 def test_training_loop(cfg):
     """Test one epoch of training and validation."""
     # with initialize(config_path="../../configs"):
