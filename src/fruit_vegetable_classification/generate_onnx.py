@@ -16,7 +16,7 @@ def main(cfg, model_path=None):
     if model_path is None:
         model_path = cfg.checkpoint.modelpath
     model_checkpoint = os.path.join(original_working_directory, model_path)
-    model.load_state_dict(torch.load(model_checkpoint))
+    model.load_state_dict(torch.load(model_checkpoint, weights_only=True))
     # scrap off .pth extension and add .onnx
     output_path = model_checkpoint[:-4] + ".onnx"
 
