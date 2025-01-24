@@ -1,7 +1,7 @@
 # config.yaml
 defaults:
   - dataset: fruit_vegetable
-  - hyperparams: config1
+  - hyperparams: config2
   - model: resnet_model
   - optimizer: adam
   - loss: cross_entropy

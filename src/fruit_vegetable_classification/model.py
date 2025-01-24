@@ -6,7 +6,6 @@ from torch import nn
 from torch.nn import functional as F
 from torchvision import models
 
-
 class MyAwesomeModel(nn.Module):
     """Dynamic model definition."""
 
@@ -98,12 +97,15 @@ class MobileNetModel(nn.Module):
         if model_type == "mobilenetV2":
             self.mobilenet = models.mobilenet_v2(weights=weights_opt)
             first_layer = self.mobilenet.features[0]
+            last_channel = self.mobilenet.last_channel
         elif model_type == "mobilenetV3L":
             self.mobilenet = models.mobilenet_v3_large(weights=weights_opt)
             first_layer = self.mobilenet.features[0][0]
+            last_channel = self.mobilenet.classifier[0].in_features  # MobileNetV3 uses classifier[0].in_features
         elif model_type == "mobilenetV3S":
             self.mobilenet = models.mobilenet_v3_small(weights=weights_opt)
             first_layer = self.mobilenet.features[0][0]
+            last_channel = self.mobilenet.classifier[0].in_features  # Same for MobileNetV3 Small
         else:
             raise ValueError(
                 f"Invalid model_type: {model_type}. Choose from 'mobilenetV2', 'mobilenetV3L', 'mobilenetV3S'."
@@ -129,7 +131,7 @@ class MobileNetModel(nn.Module):
             first_layer[1],  # Keep the original BatchNorm and activation
         )
 
-        self.mobilenet.classifier[1] = nn.Linear(self.mobilenet.last_channel, num_classes)
+        self.mobilenet.classifier[1] = nn.Linear(last_channel, num_classes)
 
     def forward(self, x):
         """Forward pass through the model."""
