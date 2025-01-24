@@ -242,8 +242,7 @@ To test training, we specfically used a small dataset (only apple and banana) to
 >
 > Answer:
 
-The total code coverage of code is 43%, which includes all our source code. We are far from 100% coverage of our code because we did not implement testing for model.
-
+The total code coverage is 43%, including all our source code. Since we don't have tests for our models, our code coverage is far from 100%. Even with 100% coverage, trust in the code still depends on the quality of the tests. If the tests only check trivial cases or don't cover real-world scenarios, the code may still have undetected problems. To improve reliability, we need to: 1. Write more comprehensive tests, including edge cases. 2. Perform integration tests to ensure that different modules work seamlessly together. 3. Perform real-world validation using production-like data. This approach will give us more confidence in the robustness of our application.
 ### Question 9
 
 > **Did you workflow include using branches and pull requests? If yes, explain how. If not, explain how branches and**
@@ -605,8 +604,7 @@ We used 78kr until 24th Jan. The most credit-consuming module is compute engine,
 >
 > Answer:
 **Architecture Overview:**
-![Overall architecture](https://github.com/user-attachments/assets/ee5ec3c7-6f7f-4ed2-9235-f2377aeab229)
-
+![Overall Architecture](figures/Overall%20architecture.png)
 The architecture consists of the following components:
 1. Local development environment *:
 -Use GitHub for code base version control.
