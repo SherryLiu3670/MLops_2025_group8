@@ -297,7 +297,7 @@ We organized our continuous integration (CI) setup using GitHub Actions. The CI 
 4. Caching: We implemented dependency caching in GitHub Actions to reduce build times by reusing previously installed packages.
 
 However, we did not add linting as a step in the CI workflow due to time constraints. Adding linting could have helped us maintain consistent code style across the team.
---- question 11 fill here ---
+
 Workflow can be seen here: [GitHub Actions Workflow](https://github.com/umairmukati/MLops_2025_group8/actions).
 
 ## Running code and tracking experiments
@@ -389,7 +389,6 @@ For hyperparameter sweeps tasks, all the parermeters of input data had been succ
 >
 > Answer:
 
---- question 15 fill here ---
 
 We created three docker images: api, frontend and train. We can build docker images by running `invoke docker-build-xxx`, xxx represents different dockerfile. And we can run these docker file by running `invoke docker-run-xxx`. In our project, docker is mainly used for delopying to google cloud. The link to the docker file(https://github.com/umairmukati/MLops_2025_group8/tree/main/dockerfiles).
 
@@ -429,7 +428,6 @@ Yes We did a single profiling run of our train code at begining, the result show
 3. Cloud Run: run docker images for backend and frontend
 We also used IAM for assigning roles for each user and service account to make sure the safety of our project.
 
---- question 17 fill here ---
 
 ### Question 18
 
@@ -445,7 +443,6 @@ We also used IAM for assigning roles for each user and service account to make s
 > Answer:
 Our usecase is to develop a backend that providing classification service for different fruit and vegetables, therefore we chose to use cloud run rather than compute engine in order to save credits while there is no user requests. After create a compute engine, we need to keep it running for processing coming requests any time, which will cause lots of waste in the idle period. Therefore we didn't use Compute engine service finally.
 
---- question 18 fill here ---
 
 ### Question 19
 
@@ -454,7 +451,7 @@ Our usecase is to develop a backend that providing classification service for di
 >
 > Answer:
 ![This is our cloud storage bucket.](figures/cloud_storage.png)
---- question 19 fill here ---
+
 
 ### Question 20
 
@@ -464,7 +461,6 @@ Our usecase is to develop a backend that providing classification service for di
 > Answer:
 ![This is our GCP artifact registry.](figures/artifact_registry.png)
 
---- question 20 fill here ---
 
 ### Question 21
 
@@ -474,7 +470,6 @@ Our usecase is to develop a backend that providing classification service for di
 > Answer:
 ![This is our GCP cloud build history.](figures/cloud_build.png)
 
---- question 21 fill here ---
 
 ### Question 22
 
@@ -490,7 +485,6 @@ Our usecase is to develop a backend that providing classification service for di
 > Answer:
 We didn't use Compute Engine to train our model. Because we did not have enough quota for gpu in GCP, the training takes a long time using just one cpu. So we finally used the model trained on our local computer. 
 
---- question 22 fill here ---
 
 ## Deployment
 
@@ -507,7 +501,6 @@ We didn't use Compute Engine to train our model. Because we did not have enough 
 >
 > Answer:
 
---- question 23 fill here ---
 
 ### Question 24
 
@@ -524,7 +517,6 @@ We didn't use Compute Engine to train our model. Because we did not have enough 
 > Answer:
 We deployed our API both locally and on cloud. Firstly we proved our API runing successfully on our computer, then we build docker image for that and push the docker image to GCP. Finally we used cloud run to run it on cloud server. We also implement an frontend to provide a user interface to upload the picture.
 
---- question 24 fill here ---
 
 ### Question 25
 
@@ -563,7 +555,6 @@ We failed to monitor the deployed models. However, monitoring can maintain the l
 
 In our case, monitoring can help us evaluate the robustness of the model under actual conditions, especially in dealing with extreme situations or data drift. This can be achieved using tools such as Prometheus and Grafana that are integrated with cloud monitoring solutions.
 
---- question 26 fill here ---
 
 ## Overall discussion of project
 
@@ -583,7 +574,6 @@ In our case, monitoring can help us evaluate the robustness of the model under a
 > Answer:
 We used 78kr until 24th Jan. The most credit-consuming module is compute engine, it is very expensive to rent high-performance gpus, and we need to pay for the time that the server keep running. After comparasion, we finally chose to use cloud run to prevent waste. That's why we only used 78kr in total. We need to keep an eye on the credits we consumed, and make sure we release the useless resource. Otherwise it will keep consuming the credits. 
 
---- question 27 fill here ---
 
 ### Question 28
 
@@ -599,7 +589,6 @@ We used 78kr until 24th Jan. The most credit-consuming module is compute engine,
 >
 > Answer:
 
---- question 28 fill here ---
 
 ### Question 29
 
@@ -646,7 +635,7 @@ The architecture consists of the following components:
 3. Use DVC to extract data and store it in GCP Bucket for access.
 4. Train the model and record the indicators in W&B to track the performance and optimize the super parameters.
 5. The trained model is integrated into the FastAPI application, containerized using Docker, and deployed to GCP Cloud Run for reasoning.
---- question 29 fill here ---
+
 
 ### Question 30
 
@@ -667,7 +656,7 @@ The biggest challenges of the project are related to the following aspects:
 
 Despite these challenges, we have taken a collaborative approach, holding regular meetings to discuss obstacles and solutions. The use of GitHub Issues, pull requests and other tools simplifies our workflow and ensures that tasks are recorded in detail and solved efficiently.
 
---- question 30 fill here ---
+
 
 ### Question 31
 
@@ -685,6 +674,9 @@ Despite these challenges, we have taken a collaborative approach, holding regula
 > Answer:
 
 Hui Wang s210331 implementing the model development, integrated wandb into the workflow and load testing of our API.
+
 Xiao Xiao s232189 implementing the dataload, and unit test of dataload, integrated wandb for hyperparameter optimization sweep. Calculate the code coverage.
+
 Yufan Wang s232213 updated the `README.md` with detailed descriptions of all `invoke` commands，write unit tests related to model construction.
+
 Xinyi Liu s232258: implemented train.py and test for train, added data version control for our project, build docker images for backend and frontend and run these dockers using cloud run.
