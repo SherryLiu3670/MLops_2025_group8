@@ -292,8 +292,15 @@ It was useful to used DVC in the context, that we do not need to download raw da
 > *here: <weblink>*
 >
 > Answer:
+We organized our continuous integration (CI) setup using GitHub Actions. The CI primarily includes the following:
+1. Unittesting: We wrote and executed unit tests for both the dataloading and model components. These tests ensured our code functioned correctly.
+2. Code coverage: We calculated code coverage to identify areas of the code that were not being tested, aiming to improve the test quality.
+3. Multi-OS Testing: CI was set up to test on both Windows and Linux environments, ensuring cross-platform compatibility.
+4. Caching: We implemented dependency caching in GitHub Actions to reduce build times by reusing previously installed packages.
 
+However, we did not add linting as a step in the CI workflow due to time constraints. Adding linting could have helped us maintain consistent code style across the team.
 --- question 11 fill here ---
+Workflow can be seen here: [GitHub Actions Workflow](https://github.com/umairmukati/MLops_2025_group8/actions).
 
 ## Running code and tracking experiments
 
@@ -538,6 +545,14 @@ For load testing, we tested the POST /label/ endpoint with 100 concurrent users 
 > *measure ... and ... that would inform us about this ... behaviour of our application.*
 >
 > Answer:
+> 
+We failed to monitor the deployed models. However, monitoring can maintain the life of the application. It is mainly reflected in the following aspects:
+1. Detect performance degradation over time, such as increased latency or decreased accuracy due to data drift.
+2. Monitor system health indicators, including memory utilization, CPU utilization and API response time.
+3. Identify serious errors or system faults, so as to realize rapid debugging and resolution.
+4. Set abnormal mode alarm to ensure active intervention.
+
+In our case, monitoring can help us evaluate the robustness of the model under actual conditions, especially in dealing with extreme situations or data drift. This can be achieved using tools such as Prometheus and Grafana that are integrated with cloud monitoring solutions.
 
 --- question 26 fill here ---
 
@@ -590,7 +605,35 @@ For load testing, we tested the POST /label/ endpoint with 100 concurrent users 
 > *Whenever we commit code and push to GitHub, it auto triggers ... and ... . From there the diagram shows ...*
 >
 > Answer:
+**Architecture Overview:**
+The architecture consists of the following components:
+1. Local development environment *:
+-Use GitHub for code base version control.
+-The cookie cutter template used to initialize the project structure.
+-Manage dependencies through 'requirements. txt' and the Conda environment.
+-Code developed for data loading, training, evaluation, and testing.
 
+2. Continuous Integration (CI) :
+-GitHub Actions for running unit tests, code coverage analysis, and Docker building.
+-Multi operating system and multi Python version testing.
+
+3. Cloud storage and version control:
+-Use DVC and GCP Buckets to version control and store data sets.
+
+4. Model training:
+-PyTorch was used to train the model locally, and W&B was used for experimental tracking.
+-Super parameter scanning through W&B.
+
+5. API deployment:
+-FastAPI for model reasoning.
+-Use GCP Cloud Run to build and deploy Docker containers.
+
+**Schema steps:**
+1. The code is developed locally and pushed to GitHub.
+2. GitHub Actions automatically triggers CI workflow for testing, building and deployment.
+3. Use DVC to extract data and store it in GCP Bucket for access.
+4. Train the model and record the indicators in W&B to track the performance and optimize the super parameters.
+5. The trained model is integrated into the FastAPI application, containerized using Docker, and deployed to GCP Cloud Run for reasoning.
 --- question 29 fill here ---
 
 ### Question 30
@@ -604,6 +647,13 @@ For load testing, we tested the POST /label/ endpoint with 100 concurrent users 
 > *The biggest challenges in the project was using ... tool to do ... . The reason for this was ...*
 >
 > Answer:
+The biggest challenges of the project are related to the following aspects:
+1. Debugging API performance problems: When performing load tests, we noticed that the delay increases and the response time is inconsistent. We solved this problem by optimizing Docker configuration and adjusting FastAPI code to reduce overhead.
+2. Data Set Processing and Preprocessing: Preprocessing fruit and vegetable data sets is very time-consuming, especially when integrating DVC for version control. We overcome this problem by pre computing and storing the processed data set, so as to minimize redundant computing.
+3. Code coverage and unit testing: To achieve sufficient code coverage, comprehensive tests need to be written for multiple components (such as models and data loaders). This is challenging due to time constraints and interdependencies between modules.
+4. Integrated W&B ultrasonic parameter scanning: due to configuration mismatch, an error was encountered when trying to run W&B scanning for the first time. These problems were solved by debugging the configuration file and viewing the W&B documentation.
+
+Despite these challenges, we have taken a collaborative approach, holding regular meetings to discuss obstacles and solutions. The use of GitHub Issues, pull requests and other tools simplifies our workflow and ensures that tasks are recorded in detail and solved efficiently.
 
 --- question 30 fill here ---
 
