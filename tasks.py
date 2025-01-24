@@ -108,7 +108,7 @@ def docker_run_api(ctx: Context) -> None:
 @task
 def docker_run_frontend(ctx: Context) -> None:
     """Run Frontend docker container."""
-    ctx.run("docker run -p 8081:8081 -e PORT=8081  frontend:latest", echo=True, pty=not WINDOWS)
+    ctx.run("docker run --rm -e PORT=8081 --net=host frontend:latest", echo=True, pty=not WINDOWS)
 
 @task
 def test_performance(ctx: Context) -> None:
