@@ -88,7 +88,13 @@ def docker_build_frontend(ctx: Context, progress: str = "plain") -> None:
 @task
 def docker_run_train(ctx: Context) -> None:
     """Run API docker container."""
-    ctx.run("docker run train:latest", echo=True, pty=not WINDOWS)
+    # check if the secret key is set
+    if "WANDB_API_KEY" not in os.environ:
+        raise ValueError("WANDB_API_KEY is not set. Run 'export WANDB_API_KEY=<your_key>'")
+    # run docker and pass secret key as environment variable
+    ctx.run("docker run -e WANDB_API_KEY=$WANDB_API_KEY -v $(pwd)/data:/app/data train:latest", echo=True, pty=not WINDOWS)
+
+    # ctx.run("docker run train:latest", echo=True, pty=not WINDOWS)
 
 @task
 def docker_run_api(ctx: Context) -> None:
