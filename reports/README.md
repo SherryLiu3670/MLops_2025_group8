@@ -605,7 +605,7 @@ We used 78kr until 24th Jan. The most credit-consuming module is compute engine,
 >
 > Answer:
 **Architecture Overview:**
-![image](https://github.com/user-attachments/assets/5da9d840-88ae-4e57-9b1d-4ce7d17a6941)
+![Overall architecture](https://github.com/user-attachments/assets/ee5ec3c7-6f7f-4ed2-9235-f2377aeab229)
 
 The architecture consists of the following components:
 1. Local development environment *:
