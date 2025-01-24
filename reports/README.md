@@ -226,8 +226,8 @@ We used available ruleset for linting and formatting our code. We have also incl
 >
 > Answer:
 
--In total we have implemented 5 tests. Among them, 2 tests were testing dataloader functionality and the rest were testing training parts.
-To test training, we specfically used a small dataset (mnist) to check if one training epoch is successful by asserting on loss and accuracy values.
+In total we have implemented 5 tests. Among them, 2 tests were testing dataloader functionality and the rest were testing training parts.
+To test training, we specfically used a small dataset (only apple and banana) to check if one training epoch is successful by asserting on loss and accuracy values.
 
 ### Question 8
 
