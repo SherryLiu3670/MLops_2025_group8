@@ -28,47 +28,91 @@ To ensure a systematic comparison, each model will be evaluated using standard m
 
 The directory structure of the project looks like this:
 ```txt
-├── .github/                  # Github actions and dependabot
-│   ├── dependabot.yaml
-│   └── workflows/
-│       └── tests.yaml
-├── configs/                  # Configuration files
-├── data/                     # Data directory
-│   ├── processed
-│   └── raw
-├── dockerfiles/              # Dockerfiles
-│   ├── api.Dockerfile
-│   └── train.Dockerfile
-├── docs/                     # Documentation
-│   ├── mkdocs.yml
-│   └── source/
-│       └── index.md
-├── models/                   # Trained models
-├── notebooks/                # Jupyter notebooks
-├── reports/                  # Reports
-│   └── figures/
-├── src/                      # Source code
-│   ├── project_name/
-│   │   ├── __init__.py
-│   │   ├── api.py
-│   │   ├── data.py
-│   │   ├── evaluate.py
-│   │   ├── models.py
-│   │   ├── train.py
-│   │   └── visualize.py
-└── tests/                    # Tests
-│   ├── __init__.py
-│   ├── test_api.py
-│   ├── test_data.py
-│   └── test_model.py
+    ├── .gitignore
+    ├── config
+├── .dvcignore
+    ├── dependabot.yaml
+        ├── tests.yaml
 ├── .gitignore
 ├── .pre-commit-config.yaml
 ├── LICENSE
-├── pyproject.toml            # Python project file
-├── README.md                 # Project README
-├── requirements.txt          # Project requirements
-├── requirements_dev.txt      # Development requirements
-└── tasks.py                  # Project tasks
+├── README.md
+├── cloudbuild.yaml
+    ├── .gitkeep
+    ├── __init__.py
+        ├── mobilenet.yaml
+        ├── resnet18.yaml
+        ├── resnet34.yaml
+    ├── config.yaml
+        ├── fruit_vegetable.yaml
+        ├── mnist.yaml
+        ├── config1.yaml
+        ├── config2.yaml
+        ├── cross_entropy.yaml
+        ├── awesome_model.yaml
+        ├── mobilenet_model.yaml
+        ├── resnet_model.yaml
+        ├── adam.yaml
+    ├── processed.dvc
+        ├── .gitkeep
+            ├── test_images.pt
+            ├── test_target.pt
+            ├── train_images_0.pt
+            ├── train_images_1.pt
+            ├── train_images_2.pt
+            ├── train_images_3.pt
+            ├── train_images_4.pt
+            ├── train_images_5.pt
+            ├── train_target_0.pt
+            ├── train_target_1.pt
+            ├── train_target_2.pt
+            ├── train_target_3.pt
+            ├── train_target_4.pt
+            ├── train_target_5.pt
+    ├── api.dockerfile
+    ├── frontend.dockerfile
+    ├── train.dockerfile
+    ├── README.md
+    ├── mkdocs.yaml
+        ├── index.md
+    ├── .gitkeep
+    ├── fruit_vegetable_partial_resnet.onnx
+    ├── fruit_vegetable_partial_resnet.pth
+    ├── .gitkeep
+├── pyproject.toml
+├── pytest.ini
+    ├── .gitkeep
+    ├── README.md
+        ├── .gitkeep
+        ├── Overall architecture.png
+        ├── artifact_registry.png
+        ├── cloud_build.png
+        ├── cloud_storage.png
+        ├── frontend.png
+        ├── training_statistics.png
+        ├── wandb.png
+├── requirements.txt
+├── requirements_api.txt
+├── requirements_dev.txt
+├── requirements_frontend.txt
+        ├── __init__.py
+        ├── api.py
+        ├── data.py
+        ├── frontend.py
+        ├── generate_onnx.py
+        ├── model.py
+        ├── test.py
+        ├── train.py
+        ├── visualize.py
+├── tasks.py
+├── temp_img.jpg
+    ├── __init__.py
+        ├── locustfile.py
+    ├── test_api.py
+    ├── test_data.py
+    ├── test_model.py
+    ├── test_train.py
+
 ```
 
 
