@@ -9,7 +9,7 @@ import pdb
 
 # Set backend API URL
 API_BASE_URL = os.getenv("API_URL", "https://fruit-and-vegetable-api-34394117935.europe-west1.run.app/")
-API_URL = f"http://127.0.0.1:8080/label"
+API_URL = f"http://localhost:8080/label"
 
 # Streamlit UI
 st.title("Fruit and Vegetable Classification App")

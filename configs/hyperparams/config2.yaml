@@ -2,6 +2,6 @@
 name: config2
 lr: 1e-3
 batch_size: 32
-epochs: 10
-device: cpu
+epochs: 50
+device: cuda
 seed: 42
