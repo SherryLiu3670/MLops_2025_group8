@@ -86,14 +86,34 @@ def docker_build_frontend(ctx: Context, progress: str = "plain") -> None:
     )
 
 @task
-def docker_run_frontend(ctx: Context) -> None:
-    """Run Frontend docker container."""
-    ctx.run("docker run -p 8001:8001 -e PORT=8001 frontend:latest", echo=True, pty=not WINDOWS)
+def docker_run_train(ctx: Context) -> None:
+    """Run API docker container."""
+    # check if the secret key is set
+    if "WANDB_API_KEY" not in os.environ:
+        raise ValueError("WANDB_API_KEY is not set. Run 'export WANDB_API_KEY=<your_key>'")
+    # run docker and pass secret key as environment variable
+    ctx.run("docker run -e WANDB_API_KEY=$WANDB_API_KEY -v $(pwd)/data:/app/data train:latest", echo=True, pty=not WINDOWS)
+
+    # ctx.run("docker run train:latest", echo=True, pty=not WINDOWS)
 
 @task
 def docker_run_api(ctx: Context) -> None:
     """Run API docker container."""
-    ctx.run("docker run -p 8000:8000 -e PORT=8000 api:latest", echo=True, pty=not WINDOWS)
+    # check if the secret key is set
+    if "WANDB_API_KEY" not in os.environ:
+        raise ValueError("WANDB_API_KEY is not set. Run 'export WANDB_API_KEY=<your_key>'")
+    # run docker and pass secret key as environment variable
+    ctx.run("docker run -p 8080:8080 -e WANDB_API_KEY=$WANDB_API_KEY -e PORT=8080 api:latest", echo=True, pty=not WINDOWS)
+
+@task
+def docker_run_frontend(ctx: Context) -> None:
+    """Run Frontend docker container."""
+    ctx.run("docker run --rm -e PORT=8081 --net=host frontend:latest", echo=True, pty=not WINDOWS)
+
+@task
+def test_performance(ctx: Context) -> None:
+    """Test API performance."""
+    ctx.run("locust -f tests/performance/locustfile.py --host https://fruit-and-vegetable-api-34394117935.europe-west1.run.app/ --headless -u 50 -t 60s", echo=True, pty=not WINDOWS)
 
 # Documentation commands
 @task(dev_requirements)

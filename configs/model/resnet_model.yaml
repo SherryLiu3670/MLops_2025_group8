@@ -1,6 +1,6 @@
 model_config:
   _target_: model.ResNetModel
-  model_type: "resnet18"  # Options: "resnet18", "resnet34", "resnet50"
+  model_type: "resnet34"  # Options: "resnet18", "resnet34", "resnet50"
   input_channels: 1
   num_classes: 10          
   pretrained: true        

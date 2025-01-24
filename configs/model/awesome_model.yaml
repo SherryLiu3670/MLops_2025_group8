@@ -10,3 +10,4 @@ model_config:
   fc_layers: [128, 64, 10]              # Fully connected layers (last value = number of output classes)
   activation: "ReLU"                    # Activation function: ReLU, LeakyReLU, Tanh, Sigmoid
   dropout_p: 0.3                        # Dropout probability
+  model_type: "awesome"                 

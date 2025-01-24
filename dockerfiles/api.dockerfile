@@ -15,6 +15,9 @@ COPY pyproject.toml pyproject.toml
 RUN --mount=type=cache,target=/root/.cache/pip pip install -r requirements_api.txt --verbose
 RUN --mount=type=cache,target=/root/.cache/pip pip install . --no-deps --verbose
 
+# Environment variable for wandb (to be overridden at runtime)
+ENV WANDB_API_KEY=""
+
 EXPOSE 8080
 
 ENTRYPOINT ["uvicorn", "src.fruit_vegetable_classification.api:app", "--host", "0.0.0.0", "--port", "8080", "--workers", "0"]

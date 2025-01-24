@@ -1,5 +1,0 @@
-lr: 1e-3
-batch_size: 32
-epochs: 10
-device: cuda
-modelpath: models/fruit_vegetable_partial_resnet.pth

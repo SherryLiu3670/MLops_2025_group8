@@ -2,7 +2,7 @@ import hydra
 import torch
 import os
 
-def main(cfg):
+def main(cfg, model_path=None):
     """Convert a PyTorch model to ONNX format."""
 
     # load the model using pth_path
@@ -13,8 +13,10 @@ def main(cfg):
     input_shape = [cfg.dataset.input_channels, *input_res]
 
     original_working_directory = os.getcwd()
-    model_checkpoint = os.path.join(original_working_directory, cfg.experiment.modelpath)
-    model.load_state_dict(torch.load(model_checkpoint))
+    if model_path is None:
+        model_path = cfg.checkpoint.modelpath
+    model_checkpoint = os.path.join(original_working_directory, model_path)
+    model.load_state_dict(torch.load(model_checkpoint, weights_only=True))
     # scrap off .pth extension and add .onnx
     output_path = model_checkpoint[:-4] + ".onnx"
 
@@ -29,7 +31,7 @@ def main(cfg):
 
 if __name__ == "__main__":
     overrides = [
-        "experiment=api"
+        "checkpoint=resnet18"
     ]
 
     # using pytest.fixture to load the config file

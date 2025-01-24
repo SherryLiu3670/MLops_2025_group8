@@ -2,101 +2,43 @@ outs:
 - hash: md5
   path: processed
   files:
-  - relpath: .DS_Store
-    md5: be719c5a0fd4f77aa5a6d9b033aa70a1
-    size: 6148
-    cloud:
-      fruit-and-vegetable:
-        etag: 08909185a7b8848b031001
-        version_id: '1737380925098128'
-  - relpath: .gitkeep
-    md5: d41d8cd98f00b204e9800998ecf8427e
-    size: 0
-    cloud:
-      fruit-and-vegetable:
-        etag: 08f3918da7b8848b031001
-        version_id: '1737380925229299'
-  - relpath: Fruit/test_images.pt
-    md5: 00998a189ca4600d462fde417d3688c2
-    size: 12043440
-    cloud:
-      fruit-and-vegetable:
-        etag: 08bab5f8a7b8848b031001
-        version_id: '1737380926986938'
-  - relpath: Fruit/test_target.pt
-    md5: 921da91711f348d9f2f5d4607203c3f1
-    size: 1328
-    cloud:
-      fruit-and-vegetable:
-        etag: 08f18099a7b8848b031001
-        version_id: '1737380925423729'
-  - relpath: Fruit/train_images.pt
-    md5: 684ffea2b885c7bd3b242a097e9eabf4
-    size: 89715893
-    cloud:
-      fruit-and-vegetable:
-        etag: 089c8bf5a9b8848b031001
-        version_id: '1737380931126684'
-  - relpath: Fruit/train_target.pt
-    md5: 3397758b44e3b331f3c4ca90b9d3fedd
-    size: 2357
-    cloud:
-      fruit-and-vegetable:
-        etag: 088df291a7b8848b031001
-        version_id: '1737380925307149'
-  - relpath: Fruit/val_images.pt
-    md5: 1d6d3730dc87df733cb9814cf12e2bc7
-    size: 12043435
-    cloud:
-      fruit-and-vegetable:
-        etag: 08afbdf2a7b8848b031001
-        version_id: '1737380926889647'
-  - relpath: Fruit/val_targets.pt
-    md5: 55f7743d837060e8d1b4c115c9e61759
-    size: 1328
-    cloud:
-      fruit-and-vegetable:
-        etag: 08cbde93a7b8848b031001
-        version_id: '1737380925337419'
+  - relpath: fruit_vegetable/test_images.pt
+    md5: 12b0c8bc19c6c76136cfb3ccf464e9f6
+    size: 204719280
+    isexec: true
+  - relpath: fruit_vegetable/test_target.pt
+    md5: 1eec56beeffbd61806f08457510cf832
+    size: 3888
+    isexec: true
+  - relpath: fruit_vegetable/train_images.pt
+    md5: 97d41d588d3ed7189597f2e8fae1b71b
+    size: 1719030965
+    isexec: true
+  - relpath: fruit_vegetable/train_target.pt
+    md5: ba57132c9e1794393b83a6812581108b
+    size: 23989
+    isexec: true
+  - relpath: fruit_vegetable/val_images.pt
+    md5: 55c7dc775d4c98fc17c65fee21111ebf
+    size: 204719275
+    isexec: true
+  - relpath: fruit_vegetable/val_targets.pt
+    md5: 00589934c14725f6535ac9ccdd80bfc3
+    size: 3888
+    isexec: true
   - relpath: mnist/test_images.pt
-    md5: 18b37e2c39abf620f11fc05d71b2bf42
+    md5: ca059f04ea442e437ee224df48b579be
     size: 15681200
-    cloud:
-      fruit-and-vegetable:
-        etag: 08ed97d7a9b8848b031001
-        version_id: '1737380930636781'
+    isexec: true
   - relpath: mnist/test_target.pt
-    md5: 4772676697fef9d0d73f999507f4c02a
+    md5: 5b345a0021c8d90655549878d6517b9f
     size: 81200
-    cloud:
-      fruit-and-vegetable:
-        etag: 08e29597a7b8848b031001
-        version_id: '1737380925393634'
+    isexec: true
   - relpath: mnist/train_images.pt
-    md5: f68b1d893d4d2c1aa860efad0a573a66
+    md5: 9a8caf669fcaa47a2340f428b07eea55
     size: 94081205
-    cloud:
-      fruit-and-vegetable:
-        etag: 0896c8afaab8848b031001
-        version_id: '1737380932084758'
+    isexec: true
   - relpath: mnist/train_target.pt
-    md5: 3dcaa7b344f58f285a1cdc644458a6bd
+    md5: c0db1f89c4d8ac4797c6a8d057649f0a
     size: 241205
-    cloud:
-      fruit-and-vegetable:
-        etag: 088ac898a7b8848b031001
-        version_id: '1737380925416458'
-  - relpath: mnist/val_images.pt
-    md5: 18b37e2c39abf620f11fc05d71b2bf42
-    size: 15681200
-    cloud:
-      fruit-and-vegetable:
-        etag: 08ffe5aca8b8848b031001
-        version_id: '1737380927845119'
-  - relpath: mnist/val_target.pt
-    md5: 4772676697fef9d0d73f999507f4c02a
-    size: 81200
-    cloud:
-      fruit-and-vegetable:
-        etag: 08a1b799a7b8848b031001
-        version_id: '1737380925430689'
+    isexec: true

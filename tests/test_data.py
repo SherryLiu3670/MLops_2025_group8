@@ -38,11 +38,11 @@ def test_data_loading(cfg):
     try:
         train_dataset_class = getattr(data, cfg.dataset.train_class)
         train_set = train_dataset_class(**cfg.dataset.process_config)
-        train_dataloader = torch.utils.data.DataLoader(train_set, batch_size=cfg.experiment.batch_size)
+        train_dataloader = torch.utils.data.DataLoader(train_set, batch_size=cfg.hyperparams.batch_size)
 
         validate_dataset_class = getattr(data, cfg.dataset.test_class)
         validate_set = validate_dataset_class(**cfg.dataset.process_config)
-        validate_dataloader = torch.utils.data.DataLoader(validate_set, batch_size=cfg.experiment.batch_size)
+        validate_dataloader = torch.utils.data.DataLoader(validate_set, batch_size=cfg.hyperparams.batch_size)
 
         assert len(train_dataloader) > 0, "Training DataLoader should not be empty."
         assert len(validate_dataloader) > 0, "Validation DataLoader should not be empty."
