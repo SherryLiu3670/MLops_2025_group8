@@ -678,4 +678,4 @@ Xiao Xiao s232189 implementing the dataload, and unit test of dataload, integrat
 
 Yufan Wang s232213 updated the `README.md` with detailed descriptions of all `invoke` commands，write unit tests related to model construction.
 
-Xinyi Liu s232258: implemented train.py and test for train, added data version control for our project, build docker images for backend and frontend and run these dockers using cloud run.
+Xinyi Liu s232258: implemented train.py and test for train, added data version control for our project, build docker images for backend and frontend and run these dockers using cloud run, modify api.py and frontend.py for model selection.
