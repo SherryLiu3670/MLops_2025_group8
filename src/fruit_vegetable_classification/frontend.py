@@ -9,7 +9,7 @@ import pdb
 
 # Set backend API URL
 API_BASE_URL = os.getenv("API_URL", "https://fruit-and-vegetable-api-34394117935.europe-west1.run.app/")
-API_URL = f"http://localhost:8000/label/"
+API_URL = f"http://localhost:8080/label/"
 
 # Streamlit UI
 st.title("Fruit and Vegetable Classification App")
@@ -37,6 +37,7 @@ if uploaded_file is not None:
 
     # Save the resized image to a temporary file
     temp_image_path = "temp_img.jpg"
+    image_resized = cv2.cvtColor(image_resized, cv2.COLOR_BGR2RGB)
     cv2.imwrite(temp_image_path, image_resized)
 
     # Make API request
