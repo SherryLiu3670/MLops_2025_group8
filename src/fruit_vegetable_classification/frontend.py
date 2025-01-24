@@ -1,16 +1,15 @@
-import threading
-import time
-import numpy as np
+import os
 import requests
+import streamlit as st
 from PIL import Image
 import cv2
-import streamlit as st
-from streamlit_webrtc import webrtc_streamer, VideoHTMLAttributes
 import numpy as np
-import av
+
+import pdb
 
 # Set backend API URL
-API_URL = "http://localhost:8000/label/"
+API_BASE_URL = os.getenv("API_URL", "https://fruit-and-vegetable-api-34394117935.europe-west1.run.app/")
+API_URL = f"http://127.0.0.1:8080/label"
 
 # Streamlit UI
 st.title("Fruit and Vegetable Classification App")
@@ -19,36 +18,32 @@ st.title("Fruit and Vegetable Classification App")
 prediction_placeholder = st.empty()
 prediction_placeholder.text("Prediction: N/A")
 
-prediction = "N/A"
+# File uploader
+uploaded_file = st.file_uploader("Upload an image", type=["jpg", "jpeg", "png"])
 
-# Initialize the WebRTC streamer
-def transform(frame: av.VideoFrame):
+if uploaded_file is not None:
+    # Open the uploaded file as a PIL image
+    image = Image.open(uploaded_file)
 
-    global prediction
+    # Display the uploaded image
+    st.image(image, caption="Uploaded Image", use_column_width=True)
 
-    # Convert the frame to an image
-    img = frame.to_ndarray(format="bgr24")
+    # Convert the image to a numpy array and resize it to 224x224
+    image_np = np.array(image)
+    image_resized = cv2.resize(image_np, (224, 224))
 
-    # resize it to 224x224 and save the img as jpeg
-    img = cv2.resize(img, (224, 224))
-    cv2.imwrite("img.jpg", img)
+    # Save the resized image to a temporary file
+    temp_image_path = "temp_img.jpg"
+    cv2.imwrite(temp_image_path, image_resized)
 
     # Make API request
-    files = {"data": open("img.jpg", "rb")}
-    response = requests.post(API_URL, files=files)
+    with open(temp_image_path, "rb") as file:
+        files = {"data": file}
+        response = requests.post(API_URL, files=files)
 
+    # Display the prediction result
     if response.status_code == 200:
         prediction = response.json().get("prediction", "N/A")
-
-webrtc_streamer(
-    key="streamer",
-    video_frame_callback=transform,
-    sendback_audio=False
-    )
-
-# setup a thread to update prediction_placeholder with the prediction every 1 second
-
-# Function to update the UI with predictions every 1 second
-while True:
-    prediction_placeholder.text(f"Prediction: {prediction}")
-    time.sleep(1)  # Update every 1 second
+        prediction_placeholder.text(f"Prediction: {prediction}")
+    else:
+        st.error("Failed to get prediction from the API.")
