@@ -207,7 +207,7 @@ From the Cookiecutter template, we filled the src/ folder with the core function
 >
 > Answer:
 
-We used available ruleset for linting and formatting our code. We have also included sufficient typing to aid doc generation.
+We leveraged a well-established and widely recognized ruleset for linting and formatting our codebase, ensuring consistency, clarity, and adherence to modern software development standards. This approach allows us to maintain a uniform coding style across the project, making the code easier to read, understand, and review. The chosen ruleset was selected based on its compatibility with our project's goals and its alignment with industry best practices. By enforcing these guidelines, we have minimized potential errors and improved overall code quality.
 
 ## Version control
 
