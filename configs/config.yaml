@@ -5,4 +5,4 @@ defaults:
   - model: resnet_model
   - optimizer: adam
   - loss: cross_entropy
-  - checkpoint: resnet18
+  - checkpoint: resnet34

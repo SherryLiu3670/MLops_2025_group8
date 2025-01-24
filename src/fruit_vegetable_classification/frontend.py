@@ -9,7 +9,7 @@ import pdb
 
 # Set backend API URL
 API_BASE_URL = os.getenv("API_URL", "https://fruit-and-vegetable-api-34394117935.europe-west1.run.app/")
-API_URL = f"http://localhost:8080/label"
+API_URL = f"http://localhost:8080/label/"
 
 # Streamlit UI
 st.title("Fruit and Vegetable Classification App")
@@ -17,6 +17,9 @@ st.title("Fruit and Vegetable Classification App")
 # Create a placeholder to display the prediction
 prediction_placeholder = st.empty()
 prediction_placeholder.text("Prediction: N/A")
+
+model_type = st.selectbox("Select model type", ["resnet18", "resnet34", "mobilenet"])
+
 
 # File uploader
 uploaded_file = st.file_uploader("Upload an image", type=["jpg", "jpeg", "png"])
@@ -34,12 +37,14 @@ if uploaded_file is not None:
 
     # Save the resized image to a temporary file
     temp_image_path = "temp_img.jpg"
+    image_resized = cv2.cvtColor(image_resized, cv2.COLOR_BGR2RGB)
     cv2.imwrite(temp_image_path, image_resized)
 
     # Make API request
     with open(temp_image_path, "rb") as file:
         files = {"data": file}
-        response = requests.post(API_URL, files=files)
+        model = {"model_type": model_type}
+        response = requests.post(API_URL, files=files, data=model)
 
     # Display the prediction result
     if response.status_code == 200:

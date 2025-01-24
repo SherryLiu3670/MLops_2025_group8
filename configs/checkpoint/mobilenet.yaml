@@ -1,0 +1,2 @@
+modelpath: dtu_mlops_group8/fruit_vegetable_classification/mobilenetV2_lr0.001_batch32_epochs50_best:latest
+name: best_model.pth
