@@ -207,7 +207,7 @@ From the Cookiecutter template, we filled the src/ folder with the core function
 >
 > Answer:
 
-We used available ruleset for linting and formatting our code. We have also included sufficient typing to generate docs properly.
+We used available ruleset for linting and formatting our code. We have also included sufficient typing to aid doc generation.
 
 ## Version control
 
@@ -499,6 +499,7 @@ We didn't use Compute Engine to train our model. Because we did not have enough 
 > *to the API to make it more ...*
 >
 > Answer:
+We successfully wrote an API for our model using FastAPI. We created a POST endpoint (/label/) that accepts an image file and a model type as input. The API loads the appropriate model based on the provided type (e.g., resnet18, resnet34, or mobilenet). It processes the image, resizes it if needed, and prepares it for inference. The model is then loaded from a WandB artifact, and we use ONNX Runtime to run the inference. The predicted label is returned as a response.
 
 
 ### Question 24
