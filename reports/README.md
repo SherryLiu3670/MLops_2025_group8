@@ -606,6 +606,8 @@ In our case, monitoring can help us evaluate the robustness of the model under a
 >
 > Answer:
 **Architecture Overview:**
+![image](https://github.com/user-attachments/assets/5da9d840-88ae-4e57-9b1d-4ce7d17a6941)
+
 The architecture consists of the following components:
 1. Local development environment *:
 -Use GitHub for code base version control.
