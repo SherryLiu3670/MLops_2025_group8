@@ -588,7 +588,7 @@ We used 78kr until 24th Jan. The most credit-consuming module is compute engine,
 > *implemented using ...*
 >
 > Answer:
-
+> Besides the basic framework, we also implement a front end. It posts an image as a file and model type as a parameter to the backend and receives the response (prediction result), which provides a friendly user interface that makes our model much easier to use. ![This is our GCP cloud build history.](figures/frontend.png)
 
 ### Question 29
 
