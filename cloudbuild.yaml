@@ -45,19 +45,7 @@ steps:
     'push',
     'europe-west1-docker.pkg.dev/dtumlops-447920/mlops-fruit-and-vegetables/api-image'
   ]
-- name: 'gcr.io/cloud-builders/gcloud'
-  id: 'Deploy to Cloud Run for api'
-  args: [
-    'run',
-    'deploy',
-    'fruit-and-vegetable-api',
-    '--image',
-    'europe-west1-docker.pkg.dev/dtumlops-447920/mlops-fruit-and-vegetables/api-image',
-    '--region',
-    'europe-west1',
-    '--platform',
-    'managed',
-  ]
+
 
 - name: 'gcr.io/cloud-builders/docker'
   id: 'Build container image for frontend'
