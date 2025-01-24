@@ -8,6 +8,7 @@ from fastapi import FastAPI, File, UploadFile
 from PIL import Image
 
 import onnxruntime as ort
+import wandb
 
 current_module_path = os.path.abspath(__file__)
 current_module_dir = os.path.dirname(current_module_path)
@@ -29,11 +30,16 @@ async def lifespan(app: FastAPI):
 
     # Configure device
     device = cfg.hyperparams.device
+    
+    # Initialize W&B run
+    run = wandb.init(project="fruit_vegetable_classification", job_type="test")
 
-    original_working_directory = os.getcwd()
-    model_checkpoint = os.path.join(original_working_directory, cfg.checkpoint.modelpath)
-    # scrap off .pth extension and add .onnx
-    model_checkpoint = model_checkpoint[:-4] + ".onnx"
+    # Use the artifact from W&B
+    artifact = run.use_artifact(cfg.checkpoint.modelpath, type='model')
+    artifact_dir = artifact.download("./models")  
+
+    # Load the model
+    model_checkpoint = os.path.join(artifact_dir, cfg.checkpoint.name[:-4] + ".onnx")
     print(f"Loading model from: {model_checkpoint}")
 
     # Add the current module directory to the Python path

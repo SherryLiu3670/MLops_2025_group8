@@ -14,11 +14,15 @@ import omegaconf
 
 import os
 
+from generate_onnx import main as generate_onnx
+
 def train_fn(cfg, stats_callback=None) -> None:
     """Train a model for classification task."""
     lr = cfg.hyperparams.lr
     batch_size = cfg.hyperparams.batch_size
     epochs = cfg.hyperparams.epochs
+    # Set the random seed for reproducibility
+    torch.manual_seed(cfg.hyperparams.seed)
 
     # Get the logging directory
     logging_dir = HydraConfig.get().runtime.output_dir
@@ -157,6 +161,11 @@ def train_fn(cfg, stats_callback=None) -> None:
     # Save the last model        
     torch.save(model.state_dict(), os.path.join(logging_dir, "last_model.pth"))
     
+    # Convert the best model to onnx
+    generate_onnx(cfg, model_path=os.path.join(logging_dir, "best_model.pth"))
+    # Convert the last model to onnx
+    generate_onnx(cfg, model_path=os.path.join(logging_dir, "last_model.pth"))
+    
     # Log the best model to wandb
     best_model_artifact = wandb.Artifact(name=f"{model_name}_best", type="model",
                                          metadata={"loss":      statistics["validation_loss"][best_epoch],
@@ -167,7 +176,8 @@ def train_fn(cfg, stats_callback=None) -> None:
                                                    "epoch":     best_epoch + 1,
                                                    }
     )
-    best_model_artifact.add_file("best_model.pth")
+    best_model_artifact.add_file(os.path.join(logging_dir, "best_model.pth"))
+    best_model_artifact.add_file(os.path.join(logging_dir, "best_model.onnx"))
     wandb.log_artifact(best_model_artifact)
     
     # Log the last model to wandb
@@ -180,7 +190,8 @@ def train_fn(cfg, stats_callback=None) -> None:
                                                    "epoch":      epochs,
                                                    }
     )
-    last_model_artifact.add_file("last_model.pth")
+    last_model_artifact.add_file(os.path.join(logging_dir, "last_model.pth"))
+    last_model_artifact.add_file(os.path.join(logging_dir, "last_model.onnx"))
     wandb.log_artifact(last_model_artifact)
 
     if stats_callback:
