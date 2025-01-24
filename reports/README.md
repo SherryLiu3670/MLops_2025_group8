@@ -123,9 +123,6 @@ group 8
 ### Question 2
 > **Enter the study number for each member in the group**
 >
-> Example:
->
-> *sXXXXXX, sXXXXXX, sXXXXXX*
 >
 > Answer:
 
@@ -274,6 +271,7 @@ Yes, our workflow included using branches and pull requests. Each team member cr
 > *pipeline*
 >
 > Answer:
+We used DVC to store our dataset(about 2 GB) on google cloud storage. After the user download our project from github, they can use dvc pull to download the processed data to their local computer. If our dataset is updated, we also push the newest version to cloud storage to make sure the data is always up-to-date. 
 
 We used DVC to version control our dataset. Initially we pushed dataset partially to be able to test. The latest push consists of full dataset.
 It was useful to used DVC in the context, that we do not need to download raw data and apply preprocessing to it. Now, we can just download dataset using dvc pull.
@@ -393,6 +391,8 @@ For hyperparameter sweeps tasks, all the parermeters of input data had been succ
 
 --- question 15 fill here ---
 
+We created three docker images: api, frontend and train. We can build docker images by running `invoke docker-build-xxx`, xxx represents different dockerfile. And we can run these docker file by running `invoke docker-run-xxx`. In our project, docker is mainly used for delopying to google cloud. The link to the docker file(https://github.com/umairmukati/MLops_2025_group8/tree/main/dockerfiles).
+
 ### Question 16
 
 > **When running into bugs while trying to run your experiments, how did you perform debugging? Additionally, did you**
@@ -424,6 +424,10 @@ Yes We did a single profiling run of our train code at begining, the result show
 > *We used the following two services: Engine and Bucket. Engine is used for... and Bucket is used for...*
 >
 > Answer:
+1. Cloud Storage: store processed data 
+2. Artifacts Registry: store docker images
+3. Cloud Run: run docker images for backend and frontend
+We also used IAM for assigning roles for each user and service account to make sure the safety of our project.
 
 --- question 17 fill here ---
 
@@ -439,6 +443,7 @@ Yes We did a single profiling run of our train code at begining, the result show
 > *using a custom container: ...*
 >
 > Answer:
+Our usecase is to develop a backend that providing classification service for different fruit and vegetables, therefore we chose to use cloud run rather than compute engine in order to save credits while there is no user requests. After create a compute engine, we need to keep it running for processing coming requests any time, which will cause lots of waste in the idle period. Therefore we didn't use Compute engine service finally.
 
 --- question 18 fill here ---
 
@@ -448,7 +453,7 @@ Yes We did a single profiling run of our train code at begining, the result show
 > **You can take inspiration from [this figure](figures/bucket.png).**
 >
 > Answer:
-
+![This is our cloud storage bucket.](figures/cloud_storage.png)
 --- question 19 fill here ---
 
 ### Question 20
@@ -457,6 +462,7 @@ Yes We did a single profiling run of our train code at begining, the result show
 > **stored. You can take inspiration from [this figure](figures/registry.png).**
 >
 > Answer:
+![This is our GCP artifact registry.](figures/artifact_registry.png)
 
 --- question 20 fill here ---
 
@@ -466,6 +472,7 @@ Yes We did a single profiling run of our train code at begining, the result show
 > **your project. You can take inspiration from [this figure](figures/build.png).**
 >
 > Answer:
+![This is our GCP cloud build history.](figures/cloud_build.png)
 
 --- question 21 fill here ---
 
@@ -481,6 +488,7 @@ Yes We did a single profiling run of our train code at begining, the result show
 > *was because ...*
 >
 > Answer:
+We didn't use Compute Engine to train our model. Because we did not have enough quota for gpu in GCP, the training takes a long time using just one cpu. So we finally used the model trained on our local computer. 
 
 --- question 22 fill here ---
 
@@ -514,6 +522,7 @@ Yes We did a single profiling run of our train code at begining, the result show
 > *`curl -X POST -F "file=@file.json"<weburl>`*
 >
 > Answer:
+We deployed our API both locally and on cloud. Firstly we proved our API runing successfully on our computer, then we build docker image for that and push the docker image to GCP. Finally we used cloud run to run it on cloud server. We also implement an frontend to provide a user interface to upload the picture.
 
 --- question 24 fill here ---
 
@@ -572,6 +581,7 @@ In our case, monitoring can help us evaluate the robustness of the model under a
 > *costing the most was ... due to ... . Working in the cloud was ...*
 >
 > Answer:
+We used 78kr until 24th Jan. The most credit-consuming module is compute engine, it is very expensive to rent high-performance gpus, and we need to pay for the time that the server keep running. After comparasion, we finally chose to use cloud run to prevent waste. That's why we only used 78kr in total. We need to keep an eye on the credits we consumed, and make sure we release the useless resource. Otherwise it will keep consuming the credits. 
 
 --- question 27 fill here ---
 
@@ -677,3 +687,4 @@ Despite these challenges, we have taken a collaborative approach, holding regula
 Hui Wang s210331 implementing the model development, integrated wandb into the workflow and load testing of our API.
 Xiao Xiao s232189 implementing the dataload, and unit test of dataload, integrated wandb for hyperparameter optimization sweep. Calculate the code coverage.
 Yufan Wang s232213 updated the `README.md` with detailed descriptions of all `invoke` commands，write unit tests related to model construction.
+Xinyi Liu s232258: implemented train.py and test for train, added data version control for our project, build docker images for backend and frontend and run these dockers using cloud run.
