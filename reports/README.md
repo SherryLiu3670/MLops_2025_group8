@@ -143,7 +143,11 @@ Hui Wang s210331, Xinyi Liu s232258, Yufan Wang s232213, Xiao Xiao s232189, Muha
 >
 > Answer:
 
---- question 3 fill here ---
+We sourced our "fruit and vegetable" dataset directly from kagglehub. Following package was installed: kagglehub==0.3.6.
+We used streamlit webrtc for live camera feed in the frontend. Following package was installed: streamlit_webrtc==0.47.9.
+Currently, our model does not work well with images from camera, possibly indicating data-drift.
+
+We did not use any higher level frameworks such as pytorch lightning. We wished to have the training/testing scripts flexible.
 
 ## Coding environment
 
@@ -171,6 +175,9 @@ To get an exact copy of our environment, a new team member would need to follow 
 3.Activate the virtual environment conda activate my_environment
 4.Install the project and its dependencies in editable mode by running pip install -e .
 This could ensur that all required dependencies were consistently installed across the team.
+
+However, using pipreqs most of the time resulted in conflicting dependencies causing errors when creating new environment.
+So, after running pipreqs each time, we made sure that the version specified in the generated file is same as the one installed in the local environment.
 
 ### Question 5
 
@@ -203,7 +210,7 @@ From the Cookiecutter template, we filled the src/ folder with the core function
 >
 > Answer:
 
---- question 6 fill here ---
+We used available ruleset for linting and formatting our code. We have also included sufficient typing to generate docs properly.
 
 ## Version control
 
@@ -222,7 +229,8 @@ From the Cookiecutter template, we filled the src/ folder with the core function
 >
 > Answer:
 
---- question 7 fill here ---
+-In total we have implemented 5 tests. Among them, 2 tests were testing dataloader functionality and the rest were testing training parts.
+To test training, we specfically used a small dataset (mnist) to check if one training epoch is successful by asserting on loss and accuracy values.
 
 ### Question 8
 
@@ -237,7 +245,7 @@ From the Cookiecutter template, we filled the src/ folder with the core function
 >
 > Answer:
 
---- question 8 fill here ---
+The total code coverage of code is 43%, which includes all our source code. We are far from 100% coverage of our code because we did not implement testing for model.
 
 ### Question 9
 
@@ -267,7 +275,8 @@ Yes, our workflow included using branches and pull requests. Each team member cr
 >
 > Answer:
 
---- question 10 fill here ---
+We used DVC to version control our dataset. Initially we pushed dataset partially to be able to test. The latest push consists of full dataset.
+It was useful to used DVC in the context, that we do not need to download raw data and apply preprocessing to it. Now, we can just download dataset using dvc pull.
 
 ### Question 11
 
