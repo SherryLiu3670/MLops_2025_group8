@@ -270,6 +270,7 @@ Yes, our workflow included using branches and pull requests. Each team member cr
 > *pipeline*
 >
 > Answer:
+
 We used DVC to store our dataset(about 2 GB) on google cloud storage. After the user download our project from github, they can use dvc pull to download the processed data to their local computer. If our dataset is updated, we also push the newest version to cloud storage to make sure the data is always up-to-date. 
 
 We used DVC to version control our dataset. Initially we pushed dataset partially to be able to test. The latest push consists of full dataset.
@@ -289,6 +290,7 @@ It was useful to used DVC in the context, that we do not need to download raw da
 > *here: <weblink>*
 >
 > Answer:
+
 We organized our continuous integration (CI) setup using GitHub Actions. The CI primarily includes the following:
 1. Unittesting: We wrote and executed unit tests for both the dataloading and model components. These tests ensured our code functioned correctly.
 2. Code coverage: We calculated code coverage to identify areas of the code that were not being tested, aiming to improve the test quality.
@@ -440,6 +442,7 @@ We also used IAM for assigning roles for each user and service account to make s
 > *using a custom container: ...*
 >
 > Answer:
+
 Our usecase is to develop a backend that providing classification service for different fruit and vegetables, therefore we chose to use cloud run rather than compute engine in order to save credits while there is no user requests. After create a compute engine, we need to keep it running for processing coming requests any time, which will cause lots of waste in the idle period. Therefore we didn't use Compute engine service finally.
 
 
@@ -482,6 +485,7 @@ Our usecase is to develop a backend that providing classification service for di
 > *was because ...*
 >
 > Answer:
+
 We didn't use Compute Engine to train our model. Because we did not have enough quota for gpu in GCP, the training takes a long time using just one cpu. So we finally used the model trained on our local computer. 
 
 
@@ -499,6 +503,7 @@ We didn't use Compute Engine to train our model. Because we did not have enough 
 > *to the API to make it more ...*
 >
 > Answer:
+
 We successfully wrote an API for our model using FastAPI. We created a POST endpoint (/label/) that accepts an image file and a model type as input. The API loads the appropriate model based on the provided type (e.g., resnet18, resnet34, or mobilenet). It processes the image, resizes it if needed, and prepares it for inference. The model is then loaded from a WandB artifact, and we use ONNX Runtime to run the inference. The predicted label is returned as a response.
 
 
@@ -515,6 +520,7 @@ We successfully wrote an API for our model using FastAPI. We created a POST endp
 > *`curl -X POST -F "file=@file.json"<weburl>`*
 >
 > Answer:
+
 We deployed our API both locally and on cloud. Firstly we proved our API runing successfully on our computer, then we build docker image for that and push the docker image to GCP. Finally we used cloud run to run it on cloud server. We also implement an frontend to provide a user interface to upload the picture.
 
 
@@ -546,7 +552,7 @@ For load testing, we tested the POST /label/ endpoint with 100 concurrent users 
 > *measure ... and ... that would inform us about this ... behaviour of our application.*
 >
 > Answer:
-> 
+
 We failed to monitor the deployed models. However, monitoring can maintain the life of the application. It is mainly reflected in the following aspects:
 1. Detect performance degradation over time, such as increased latency or decreased accuracy due to data drift.
 2. Monitor system health indicators, including memory utilization, CPU utilization and API response time.
@@ -572,6 +578,7 @@ In our case, monitoring can help us evaluate the robustness of the model under a
 > *costing the most was ... due to ... . Working in the cloud was ...*
 >
 > Answer:
+
 We used 78kr until 24th Jan. The most credit-consuming module is compute engine, it is very expensive to rent high-performance gpus, and we need to pay for the time that the server keep running. After comparasion, we finally chose to use cloud run to prevent waste. That's why we only used 78kr in total. We need to keep an eye on the credits we consumed, and make sure we release the useless resource. Otherwise it will keep consuming the credits. 
 
 
@@ -588,7 +595,8 @@ We used 78kr until 24th Jan. The most credit-consuming module is compute engine,
 > *implemented using ...*
 >
 > Answer:
-> Besides the basic framework, we also implement a front end. It posts an image as a file and model type as a parameter to the backend and receives the response (prediction result), which provides a friendly user interface that makes our model much easier to use. ![This is our frontend interface.](figures/frontend.png)
+
+Besides the basic framework, we also implement a front end. It posts an image as a file and model type as a parameter to the backend and receives the response (prediction result), which provides a friendly user interface that makes our model much easier to use. ![This is our frontend interface.](figures/frontend.png)
 
 ### Question 29
 
@@ -647,6 +655,7 @@ The architecture consists of the following components:
 > *The biggest challenges in the project was using ... tool to do ... . The reason for this was ...*
 >
 > Answer:
+
 The biggest challenges of the project are related to the following aspects:
 1. Debugging API performance problems: When performing load tests, we noticed that the delay increases and the response time is inconsistent. We solved this problem by optimizing Docker configuration and adjusting FastAPI code to reduce overhead.
 2. Data Set Processing and Preprocessing: Preprocessing fruit and vegetable data sets is very time-consuming, especially when integrating DVC for version control. We overcome this problem by pre computing and storing the processed data set, so as to minimize redundant computing.
